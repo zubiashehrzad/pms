@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "ViewDetails";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+
+    var user = ViewBag.UserDetail;
+}
+<form>
+
+
+    <h2>View User Details</h2>
+
+    <label>Name:</label> @(user.FirstName + ' ' + user.LastName)<br />
+    <label>DOB:</label> @(user.DOB)<br />
+
+    <label>Gender:</label>@(user.Gender == 1 ? "Male" : "FeMale")<br />
+    <label>Address:</label> @(user.Address)<br />
+    <label>Phone:</label> @(user.Phone)<br />
+    <label>Email:</label> @(user.Email)<br />
+
+    <label>User Name:</label> @(user.UserName)<br />
+    <label>Password:</label> @(user.Password)<br />
+
+
+
+</form>
+
+
+
+

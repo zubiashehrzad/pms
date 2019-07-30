@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PMSDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="PatientPhysician">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PatientId" Type="Int32" Nullable="false" />
+    <Property Name="PhysicianId" Type="Int32" Nullable="false" />
+    <Property Name="IsPrimary" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Patient" Relationship="Self.FK_PatientPhysicians_Patients" FromRole="PatientPhysicians" ToRole="Patients" />
+    <NavigationProperty Name="Physician" Relationship="Self.FK_PatientPhysicians_Physicians" FromRole="PatientPhysicians" ToRole="Physicians" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FamilyHistory" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="Disability" Type="Boolean" />
+    <Property Name="DisabilityDetails" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="Height" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Weight" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="PatientPhysicians" Relationship="Self.FK_PatientPhysicians_Patients" FromRole="Patients" ToRole="PatientPhysicians" />
+    <NavigationProperty Name="User" Relationship="PMSDBModel.FK_Patients_Users" FromRole="Patient" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Physician">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Speciality" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Experience" Type="Int32" />
+    <Property Name="Location" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Shift" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="PatientPhysicians" Relationship="Self.FK_PatientPhysicians_Physicians" FromRole="Physicians" ToRole="PatientPhysicians" />
+    <NavigationProperty Name="User" Relationship="PMSDBModel.FK_Physicians_Users" FromRole="Physician" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_PatientPhysicians_Patients">
+    <End Role="Patients" Type="Self.Patient" Multiplicity="1" />
+    <End Role="PatientPhysicians" Type="Self.PatientPhysician" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patients">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientPhysicians">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientPhysicians_Physicians">
+    <End Role="Physicians" Type="Self.Physician" Multiplicity="1" />
+    <End Role="PatientPhysicians" Type="Self.PatientPhysician" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Physicians">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientPhysicians">
+        <PropertyRef Name="PhysicianId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PMSEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="PatientPhysicians" EntityType="Self.PatientPhysician" />
+    <EntitySet Name="Patients" EntityType="Self.Patient" />
+    <EntitySet Name="Physicians" EntityType="Self.Physician" />
+    <AssociationSet Name="FK_PatientPhysicians_Patients" Association="Self.FK_PatientPhysicians_Patients">
+      <End Role="Patients" EntitySet="Patients" />
+      <End Role="PatientPhysicians" EntitySet="PatientPhysicians" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientPhysicians_Physicians" Association="Self.FK_PatientPhysicians_Physicians">
+      <End Role="Physicians" EntitySet="Physicians" />
+      <End Role="PatientPhysicians" EntitySet="PatientPhysicians" />
+    </AssociationSet>
+    <EntitySet Name="Modules" EntityType="PMSDBModel.Module" />
+    <EntitySet Name="UserPermissions" EntityType="PMSDBModel.UserPermission" />
+    <AssociationSet Name="FK_UserPermissions_Modules" Association="PMSDBModel.FK_UserPermissions_Modules">
+      <End Role="Module" EntitySet="Modules" />
+      <End Role="UserPermission" EntitySet="UserPermissions" />
+    </AssociationSet>
+    <EntitySet Name="Roles" EntityType="PMSDBModel.Role" />
+    <EntitySet Name="Users" EntityType="PMSDBModel.User" />
+    <AssociationSet Name="FK_Patients_Users" Association="PMSDBModel.FK_Patients_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Patient" EntitySet="Patients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Physicians_Users" Association="PMSDBModel.FK_Physicians_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Physician" EntitySet="Physicians" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserPermissions_Roles" Association="PMSDBModel.FK_UserPermissions_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="UserPermission" EntitySet="UserPermissions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Users_Roles" Association="PMSDBModel.FK_Users_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Module">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ModuleName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserPermissions" Relationship="PMSDBModel.FK_UserPermissions_Modules" FromRole="Module" ToRole="UserPermission" />
+  </EntityType>
+  <EntityType Name="UserPermission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="ModuleId" Type="Int32" Nullable="false" />
+    <Property Name="CanView" Type="Boolean" Nullable="false" />
+    <Property Name="CanWrite" Type="Boolean" Nullable="false" />
+    <Property Name="CanDelete" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Module" Relationship="PMSDBModel.FK_UserPermissions_Modules" FromRole="UserPermission" ToRole="Module" />
+    <NavigationProperty Name="Role" Relationship="PMSDBModel.FK_UserPermissions_Roles" FromRole="UserPermission" ToRole="Role" />
+  </EntityType>
+  <Association Name="FK_UserPermissions_Modules">
+    <End Type="PMSDBModel.Module" Role="Module" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="PMSDBModel.UserPermission" Role="UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="ModuleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="UserPermissions" Relationship="PMSDBModel.FK_UserPermissions_Roles" FromRole="Role" ToRole="UserPermission" />
+    <NavigationProperty Name="Users" Relationship="PMSDBModel.FK_Users_Roles" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DOB" Type="DateTime" Precision="3" />
+    <Property Name="Gender" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="Role_Id" Type="Int32" />
+    <NavigationProperty Name="Patients" Relationship="PMSDBModel.FK_Patients_Users" FromRole="User" ToRole="Patient" />
+    <NavigationProperty Name="Physicians" Relationship="PMSDBModel.FK_Physicians_Users" FromRole="User" ToRole="Physician" />
+    <NavigationProperty Name="Role" Relationship="PMSDBModel.FK_Users_Roles" FromRole="User" ToRole="Role" />
+  </EntityType>
+  <Association Name="FK_Patients_Users">
+    <End Type="PMSDBModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="PMSDBModel.Patient" Role="Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patient">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Physicians_Users">
+    <End Type="PMSDBModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="PMSDBModel.Physician" Role="Physician" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Physician">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPermissions_Roles">
+    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="PMSDBModel.UserPermission" Role="UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Roles">
+    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="0..1" />
+    <End Type="PMSDBModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="Role_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

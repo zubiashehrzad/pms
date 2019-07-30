@@ -1,0 +1,192 @@
+﻿@model  PMS.Models.Physician
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+}
+
+<form method="post" action="@Url.Action("../Physician/Save")">
+    <div class="container">
+        <div class="card card-register mx-auto mt-5">
+            <div class="card-header">Physician Information</div>
+
+       
+
+
+                <input type="hidden" name="Id" value="@(Model != null ? Model.User.Id : 0)" />
+                <input type="hidden" name="Physicians[0].Id" value="@(Model != null ? Model.Id : 0)" />
+                <input type="hidden" name="Physicians[0].UserId" value="@(Model != null ? Model.UserId : 0)" />
+                <input type="hidden" name="Role_Id" value="3" />
+
+
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="text" id="inputfirstName" name="FirstName" value="@(Model != null ? Model.User.FirstName : "")" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
+                                <label for="inputfirstName">First name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="text" id="inputlastName" name="LastName" value="@(Model != null ? Model.User.LastName : "")" class="form-control" placeholder="Last name" required="required">
+                                <label for="inputlastName">Last name</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>   <!–– fname,lname-->
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="text" id="inputmiddleName" name="MiddleName" value="@(Model != null ? Model.User.MiddleName : "")" class="form-control" placeholder="Middle name" required="required" autofocus="autofocus">
+                                <label for="inputmiddleName">Middle name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="text" id="inputDOB" name="DOB" value="@(Model != null ? Convert.ToDateTime(Model.User.DOB).ToShortDateString() : "")" class="form-control" placeholder="DOB" required="required">
+                                <label for="inputDOB">DOB</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>   <!–– middle name,dob-->
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="text" id="inputuserName" name="UserName" value="@(Model != null ? Model.User.UserName : "")" class="form-control" placeholder="Username" required="required">
+                                <label for="inputuserName">User Name</label>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>   <!–– user name,role-->
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassword" name="Password" value="@(Model != null ? Model.User.Password : "")" class="form-control" placeholder="Password" required="required">
+                                <label for="inputPassword">Password</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="password" id="confirmPassword" value="@(Model != null ? Model.User.Password : "")" class="form-control" placeholder="Confirm password" required="required">
+                                <label for="confirmPassword">Confirm password</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>    <!–– password,confirm-->
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <input type="tel" id="inputphone" name="Phone" value="@(Model != null ? Model.User.Phone : "")" class="form-control" placeholder=phone" required="required" autofocus="autofocus">
+                                <label for="inputphone">Phone</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <select id="inputGender" name="Gender" style="width:100%;">
+                                    <option value="0">--Select Gender--</option>
+                                    <option value="1" @(Model != null && Model.User.Gender == 1 ? "selected" : "")>Male</option>
+                                    <option value="2" @(Model != null && Model.User.Gender == 2 ? "selected" : "")>FeMale</option>
+                                </select>
+                            </div>
+                            @*@Html.DropDownList("Gender", new List<SelectListItem>{
+                                new SelectListItem{ Text="Male", Value="1"},
+                                new SelectListItem{ Text="Female", Value="2"}
+                                }, "--- Select ---"
+                                )*@
+                        </div>
+
+                    </div>
+                </div>    <!––phone,gender-->
+
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="email" id="inputEmail" name="Email" value="@(Model != null ? Model.User.Email : " ")" class="form-control" placeholder="Email address" required="required">
+                        <label for="inputEmail">Email address</label>
+                    </div>
+                </div>     <!–– email-->
+
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="text" id="inputaddress" name="Address" value="@(Model != null ? Model.User.Address : " ")" class="form-control" placeholder="address" required="required">
+                        <label for="inputaddress">Address</label>
+                    </div>
+                </div>  <!–– address-->
+
+
+          
+
+
+
+            <div class="card-header">Physician Details</div>
+
+
+
+                
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-label-group">
+
+                                    <input type="text" id="inputExperience" name="Physicians[0].Experience" value="@(Model !=null? Model.Experience:null)" class="form-control" placeholder="Experiance">
+                                    <label for="inputExperiance">Experience</label>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-label-group">
+                                    <input type="text" id="inputShift" name="Physicians[0].Shift" value="@(Model != null ? Model.Shift : " ")" class="form-control" placeholder="Shift">
+                                    <label for="inputinputShift">Shift</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>   <!--user Id, Shift-->
+                    <!--Location, Experiance-->
+
+
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" id="inputLocation" name="Physicians[0].Location" value="@(Model != null ? Model.Location : " ")" class="form-control" placeholder="Location" required="required" autofocus="autofocus">
+                            <label for="inputLocation">Location</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" id="inputSpeciality" name="Physicians[0].Speciality" value="@(Model != null ? Model.Speciality : " ")" class="form-control" placeholder="Speciality" required="required">
+                            <label for="inputSpeciality">Speciality</label>
+                        </div>
+                    </div>  <!-- Speciality-->
+
+
+               
+
+
+
+            <button type="submit" class="btn btn-primary btn-block">Register Physician</button>
+        </div>
+  
+    </div>
+</form>
+    
+
+
+
+
+

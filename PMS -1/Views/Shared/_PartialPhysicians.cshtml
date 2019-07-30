@@ -1,0 +1,35 @@
+﻿
+
+@{
+    var physicians = ViewBag.PPhysicians;
+}
+
+<div class="col-md-6">
+    <div class="form-label-group">
+        <table>
+
+            @foreach (var phy in physicians)
+            {
+                <!--  @phy.PhysicianId;
+                    -->
+                <tr>
+                    <td>
+
+                        <label>Name:</label> @(phy.Physician.User.FirstName + " " + phy.Physician.User.LastName)<br />
+                        <label>Speciality:</label>@phy.Physician.Speciality <br />
+                        <label>Experience:</label> @phy.Physician.Experience <br />
+                        <label>Location:</label>@phy.Physician.Location <br />
+                        <label>Shift:</label> @phy.Physician.Shift  <br />
+
+
+                        <button type="button" value="Diassociate" onclick="removePatientPhysician(@phy.Id)" class="btn btn-danger btn-sm">Diassociate</button>
+                    </td>
+                </tr>
+
+            }
+
+        </table>
+
+
+    </div>
+</div>

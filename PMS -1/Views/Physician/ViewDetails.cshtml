@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "ViewDetails";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+
+    var physician = ViewBag.PhysicianDetail;
+
+}
+<form>
+
+
+    <h2>View Physician Details</h2>
+
+    <label>Name:</label> @(physician.User.FirstName + ' ' + physician.User.LastName)<br />
+    <label>DOB:</label> @(physician.User.DOB)<br />
+    <label>Gender:</label>@(physician.User.Gender == 1 ? "Male" : "FeMale")<br />
+    <label>Address:</label> @(physician.User.Address)<br />
+    <label>Phone:</label> @(physician.User.Phone)<br />
+    <label>Email:</label> @(physician.User.Email)<br />
+    <label>User Name:</label> @(physician.User.UserName)<br />
+    <label>Password:</label> @(physician.User.Password)<br />
+    <label>Speciality:</label> @(physician.Speciality)<br />
+    <label>Experiance:</label> @(physician.Experience)<br />
+    <label>Location:</label> @(physician.Location)<br />
+    <label>Shift:</label> @(physician.Shift)<br />
+
+
+</form>
+
+
