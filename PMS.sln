@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS", "PMS\PMS.csproj", "{4A2B574E-3327-45F2-BAF8-8F5239F16581}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Tests", "PMS.Tests\PMS.Tests.csproj", "{3AEE2691-016D-434D-A3B0-0C2E9ED0B23E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A2B574E-3327-45F2-BAF8-8F5239F16581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2B574E-3327-45F2-BAF8-8F5239F16581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2B574E-3327-45F2-BAF8-8F5239F16581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2B574E-3327-45F2-BAF8-8F5239F16581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AEE2691-016D-434D-A3B0-0C2E9ED0B23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AEE2691-016D-434D-A3B0-0C2E9ED0B23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AEE2691-016D-434D-A3B0-0C2E9ED0B23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AEE2691-016D-434D-A3B0-0C2E9ED0B23E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {279DCD60-E10C-43C7-B00C-56A042079C8F}
+	EndGlobalSection
+EndGlobal
