@@ -1,4 +1,7 @@
-﻿
+﻿@{
+    var user = (PMS.Models.User)Session["User"];
+    var permissions = user.Role.UserPermissions;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,15 +53,15 @@
         </form>
 
         <!-- Navbar -->
-        
-           
-            <a class="nav-link" href="~/User/LogOut">
 
-                <span>LogOut</span>
-            </a>
-            
 
-</nav>
+        <a class="nav-link" href="~/User/LogOut">
+
+            <span>LogOut</span>
+        </a>
+
+
+    </nav>
 
     <div id="wrapper">
 
@@ -72,45 +75,53 @@
                 </a>
             </li>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>User</span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            @if (permissions.Count > 0 && permissions.Any(p => p.Module != null && p.Module.ModuleName == "Users"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>User</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Users" && p.CanWrite))
+                        {
+                            <a class="dropdown-item" href="~/User/Register">Add User</a>
+                        }
+                        <a class="dropdown-item" href="~/User/Index">List User</a>
 
-                    <a class="dropdown-item" href="~/User/Register">Add User</a>
-                    <a class="dropdown-item" href="~/User/Index">List User</a>
+                    </div>
+                </li>
+            }
 
-                </div>
-            </li>
+            @if (permissions.Count > 0 && permissions.Any(p => p.Module != null && p.Module.ModuleName == "Physicians"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Physician</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
 
+                        <a class="dropdown-item" href="~/Physician/Add">Add Physician</a>
+                        <a class="dropdown-item" href="~/Physician/Index">List Physician</a>
+                    </div>
+                </li>
+            }
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Physician</span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            @if (permissions.Count > 0 && permissions.Any(p => p.Module != null && p.Module.ModuleName == "Patients"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Patient</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
 
-                    <a class="dropdown-item" href="~/Physician/Add">Add Physician</a>
-                    <a class="dropdown-item" href="~/Physician/Index">List Physician</a>
-                </div>
-            </li>
-
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Patient</span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-
-                    <a class="dropdown-item" href="~/Patient/Add">Add Patient</a>
-                    <a class="dropdown-item" href="~/Patient/Index">List Patient</a>
-                </div>
-            </li>
-
+                        <a class="dropdown-item" href="~/Patient/Add">Add Patient</a>
+                        <a class="dropdown-item" href="~/Patient/Index">List Patient</a>
+                    </div>
+                </li>
+            }
 
 
 

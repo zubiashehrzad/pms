@@ -18,7 +18,7 @@
     <WebStackScaffolding_LayoutPageFile>~/Views/Shared/_myLayoutPage1.cshtml</WebStackScaffolding_LayoutPageFile>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <WebStackScaffolding_DbContextTypeFullName>PMS.Models.PMSEntities1</WebStackScaffolding_DbContextTypeFullName>
   </PropertyGroup>
   <ProjectExtensions>

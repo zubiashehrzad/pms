@@ -3539,7 +3539,7 @@
     <Content Include="vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="vendor\jquery\jquery.min.map" />
     <Content Include="vendor\jquery\jquery.slim.min.map" />
-    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="startbootstrap-sb-admin-gh-pages\Login.cshtml" />
     <Content Include="startbootstrap-sb-admin-gh-pages\.gitignore" />
     <Content Include="startbootstrap-sb-admin-gh-pages\.travis.yml" />
     <Content Include="startbootstrap-sb-admin-gh-pages\LICENSE" />
@@ -3713,6 +3713,7 @@
     <Content Include="Views\Physician\ViewDetails.cshtml" />
     <Content Include="Views\User\ViewDetails.cshtml" />
     <Content Include="Views\User\RegisterPermission.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
