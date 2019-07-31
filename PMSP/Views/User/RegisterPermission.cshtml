@@ -50,9 +50,9 @@
                     </div>
                 </div>
 
-                Can View <input type="checkbox" id="chk_CanView" name="CanView" @(Model != null && Model.CanView ? "checked" : "") value="@(Model != null && Model.CanView ? "true" : "false")" onchange="setValue(this)" />
-                Can View <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete ? "checked" : "") value="@(Model != null && Model.CanDelete ? "true" : "false")" onchange="setValue(this)" />
-                Can View <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite ? "checked" : "") value="@(Model != null && Model.CanWrite ? "true" : "false")" onchange="setValue(this)" />
+                Can View <input type="checkbox" id="chk_CanView" name="CanView" @(Model != null && Model.CanView ? "checked" : "") value="@(Model != null && Model.CanView ? "true" : "false")" onchange="setValue(this)" /> <br/>
+                Can View <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete ? "checked" : "") value="@(Model != null && Model.CanDelete ? "true" : "false")" onchange="setValue(this)" /><br />
+                Can View <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite ? "checked" : "") value="@(Model != null && Model.CanWrite ? "true" : "false")" onchange="setValue(this)" /><br />
                 @*<div class="form-group">
             <div class="form-row">
                 <div class="col-md-6">

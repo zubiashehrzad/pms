@@ -19,7 +19,8 @@ namespace PMS.Controllers
         PhysicianRepo _physicianRepo = new PhysicianRepo();
         PatientRepo _patientRepo = new PatientRepo();
         // GET: User
-     
+        [CustomAuthorize]
+
         public ActionResult Index()
         {
             var users = _userRepo.GetUsers();
@@ -27,37 +28,32 @@ namespace PMS.Controllers
             ViewBag.users = users;   // its a container that takes the value from controller and passes it to view, it can contain any string or object
             return View(users);   // it ll map the model on view that we can use there to show/list the values from DB, can use one of them at a time
         }
-      
+
+        [CustomAuthorize]
         public ActionResult Save(User user)
         {
-
             var repoUser = _userRepo.Save(user);   //save
             return RedirectToAction("Index", "User", new { });  //view and show, redirect on this page
                                                                 ////0r
                                                                 //  return RedirectToAction("~/User");
         }
-        
+        [CustomAuthorize]
         public ActionResult SavePermission(UserPermission userpermission)
         {
 
             var repoUser = _userRepo.SavePermission(userpermission);
             //save
 
-            PMSEntities1 db = new PMSEntities1();
-            var roles = db.Roles.Where(r => r.Title != "Admin").ToList();
-            //SelectList list = new SelectList(Getlist, "Id", "Title");
-            ViewBag.RolesList = roles;
-
-            var modules = db.Modules.ToList();
-            ViewBag.ModulesList = modules;
+            SetRolesAndModules();
 
             ViewBag.message = "Permissions Saved Successfully...!";
             return View("RegisterPermission");  //view and show, redirect on this page
-                                                                ////0r
-                                                                //  return RedirectToAction("~/User");
+                                                ////0r
+                                                //  return RedirectToAction("~/User");
         }
-        
-       
+
+        [CustomAuthorize]
+
         public ActionResult ViewDetails(int id)
         {
             ViewBag.UserDetail = _userRepo.GetUser(id);
@@ -95,14 +91,10 @@ namespace PMS.Controllers
         }
 
         // GET: Register
-       
+        [CustomAuthorize]
+
         public ActionResult Register()
         {
-            /* PMSEntities1 db = new PMSEntities1();
-             List<Roles> list = db.Roles.ToList();
-             ViewBag.RolesList = new SelectList(list, "Id", "Title" ); */
-
-
             PMSEntities1 db = new PMSEntities1();
             var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
             //SelectList list = new SelectList(Getlist, "Id", "Title");
@@ -111,34 +103,22 @@ namespace PMS.Controllers
 
             return View();
         }
+        [CustomAuthorize]
 
         public ActionResult RegisterPermission()
         {
-            /* PMSEntities1 db = new PMSEntities1();
-             List<Roles> list = db.Roles.ToList();
-             ViewBag.RolesList = new SelectList(list, "Id", "Title" ); */
 
-
-            PMSEntities1 db = new PMSEntities1();
-            var roles = db.Roles.Where(r => r.Title != "Admin").ToList();
-            //SelectList list = new SelectList(Getlist, "Id", "Title");
-            ViewBag.RolesList = roles;
-
-            var modules = db.Modules.ToList();
-            ViewBag.ModulesList = modules;
-
+            SetRolesAndModules();
             return View();
         }
-       
+        [CustomAuthorize]
+
         public ActionResult Delete(int id)
         {
             bool deleted = _userRepo.Delete(id);
             return RedirectToAction("Index", "user", new { });
         }
-
-
-
-       
+        [CustomAuthorize]
         public ActionResult Edit(int id)
         {
             var User = _userRepo.GetUser(id);
@@ -149,13 +129,13 @@ namespace PMS.Controllers
 
             return View("Register", User);
         }
-
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
-        
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             Session["User"] = null; //removes only one session, session.remove means only remove this one session
@@ -163,9 +143,8 @@ namespace PMS.Controllers
             Session.Abandon(); // flush all of the sessions 
             return RedirectToAction("Login", "User", new { });
         }
-
-
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Authenticate(string txtUserName, string txtPassword)
         {
             bool isValid = _userRepo.Validate(txtUserName, txtPassword);
@@ -178,5 +157,17 @@ namespace PMS.Controllers
             ViewBag.Message = "Invalid Username/Password!";
             return View("Login");
         }
+
+
+        public void SetRolesAndModules()
+        {
+            PMSEntities1 db = new PMSEntities1();
+            var roles = db.Roles.Where(r => r.Title != "Admin").ToList();
+            //SelectList list = new SelectList(Getlist, "Id", "Title");
+            ViewBag.RolesList = roles;
+            var modules = db.Modules.ToList();
+            ViewBag.ModulesList = modules;
+        }
     }
+
 }
