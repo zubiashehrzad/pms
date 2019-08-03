@@ -7,9 +7,14 @@
 
 <div class="container">
     <div class="card card-register mx-auto mt-5">
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Message</div>
+        }
         <div class="card-header">Register User</div>
         <div class="card-body">
             <form method="post" action="@Url.Action("../User/Save")">
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <div class="form-row">
                         <input type="hidden" name="Id" value="@(Model != null ? Model.Id: 0)" />
@@ -51,8 +56,8 @@
                         <div class="col-md-6">
                             <div class="form-label-group" style="width:100%;">
                                 <!--
-                                <input type="number" id="inputrole_Id" name="Role_Id" class="form-control" placeholder="Role" required="required">
-                                <label for="inputrole_Id">Role</label>  -->
+                            <input type="number" id="inputrole_Id" name="Role_Id" class="form-control" placeholder="Role" required="required">
+                            <label for="inputrole_Id">Role</label>  -->
                                 @*@Html.DropDownList("Role_Id", ViewBag.RolesList as SelectList, "Choose Role")*@
 
 
@@ -60,7 +65,7 @@
                                     <option id="0">---Select Role---</option>
                                     @foreach (PMS.Models.Role role in ViewBag.RolesList)
                                     {
-                                    <option id="@role.Id" @(Model != null && Model.Role_Id == role.Id ? "selected" : "") value="@role.Id">@role.Title    required="required"</option>
+                                        <option id="@role.Id" @(Model != null && Model.Role_Id == role.Id ? "selected" : "") value="@role.Id">@role.Title    </option>
 
                                     }
                                 </select>
@@ -68,8 +73,9 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label id="lbl_invalidUser" class="alert-danger"></label>
                             <div class="form-label-group">
-                                <input type="text" id="inputuserName" name="UserName" value="@(Model !=null? Model.UserName:"")" class="form-control" placeholder="Username" required="required">
+                                <input type="text" id="inputuserName" name="UserName" value="@(Model !=null? Model.UserName:"")" class="form-control" placeholder="Username" required="required" onfocus="validateusername()">
                                 <label for="inputuserName">User Name</label>
                             </div>
 
@@ -108,10 +114,10 @@
                         <div class="col-md-6">
 
                             <!--
-                            <div class="form-label-group">
-                                  <input type="number" id="inputgender" name="Gender" class="form-control" placeholder="Gender" required="required">
-                                  <label for="inputgender">Gender</label>
-                            </div> -->
+                        <div class="form-label-group">
+                              <input type="number" id="inputgender" name="Gender" class="form-control" placeholder="Gender" required="required">
+                              <label for="inputgender">Gender</label>
+                        </div> -->
 
 
                             <div class="form-label-group">
@@ -151,4 +157,30 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function () {
 
+        $("#inputuserName").change(function () {
+            //alert('value changed');
+            var username = $(this).val();
+            //alert(username);
+            $.ajax({
+                url: "@Url.Content("~/User/IsValid")",
+                type: "POST",
+                data: { UserName: username },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidUser").html("This user name is already taken, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidUser").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>

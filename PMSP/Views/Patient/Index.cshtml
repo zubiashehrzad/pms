@@ -5,10 +5,16 @@
     Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
     //List<PMS.Models.User> users = ViewBag.users;
     //List<PMS.Models.User> vUsers = (List<PMS.Models.User>)ViewData["users"];
+
+    var user1 = (PMS.Models.User)Session["User"];
+    var permissions = user1.Role.UserPermissions;
+
+}
+}
 }
 
 <!-- DataTables Example -->
-<div class="card mb-3"> 
+<div class="card mb-3">
     <div class="card-header">
         <i class="fas fa-table"></i>
         Record Of Patients
@@ -61,7 +67,19 @@
                             <td>
                                 @patient.Weight
                             </td>
-                            <td><a href="~/Patient/Delete/@patient.Id">Delete</a> | <a href="~/Patient/Edit/@patient.Id">Edit</a> | <a href="~/Patient/ViewDetails/@patient.Id">View</a></td>
+                            <td>
+                                @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Patients" && p.CanDelete))
+                                {
+                                    <a href="~/Patient/Delete/@patient.Id">Delete</a> <span> | </span>
+                                }
+                                @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Patients" && p.CanWrite))
+                                {
+
+                                    <a href="~/Patient/Edit/@patient.Id">Edit</a> <span> | </span>
+                                }
+
+                                <a href="~/Patient/ViewDetails/@patient.Id">View</a>
+                            </td>
                         </tr>
                     }
 

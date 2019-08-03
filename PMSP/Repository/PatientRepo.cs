@@ -12,7 +12,13 @@ namespace PMS.Repository
 
         public List<Patient> GetPatients()
         {
+            try { 
             return _db.Patients.ToList();
+            }
+            catch(Exception ex)
+            {
+                return new List<Patient>();
+            }
         }
 
         public Patient GetPatient(int id)

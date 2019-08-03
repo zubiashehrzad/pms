@@ -3714,6 +3714,8 @@
     <Content Include="Views\User\ViewDetails.cshtml" />
     <Content Include="Views\User\RegisterPermission.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\User\IndexPermission.cshtml" />
+    <Content Include="Views\User\ViewPermissionDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -18,9 +18,10 @@ namespace PMS.Controllers
         UserRepo _userRepo = new UserRepo();
         PhysicianRepo _physicianRepo = new PhysicianRepo();
         PatientRepo _patientRepo = new PatientRepo();
-        // GET: User
-        [CustomAuthorize]
 
+        #region User
+        // GET: User
+        [CustomAuthorize(permissionEntity = "Users")]
         public ActionResult Index()
         {
             var users = _userRepo.GetUsers();
@@ -29,14 +30,65 @@ namespace PMS.Controllers
             return View(users);   // it ll map the model on view that we can use there to show/list the values from DB, can use one of them at a time
         }
 
-        [CustomAuthorize]
+        [CustomAuthorize(permissionEntity = "Users")]  //authorize
+        [ValidateAntiForgeryToken] //chk that request is secure or not and comming from our own application,
+        [HttpPost] // chk request type, all of these 3 are action filters
         public ActionResult Save(User user)
         {
-            var repoUser = _userRepo.Save(user);   //save
-            return RedirectToAction("Index", "User", new { });  //view and show, redirect on this page
-                                                                ////0r
-                                                                //  return RedirectToAction("~/User");
+            if (IsValid(user.UserName))
+            {
+                ViewBag.Message = "Username already taken, please try with a different username!";
+                PMSEntities1 db = new PMSEntities1();
+                var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
+                ViewBag.RolesList = roles;
+                return View("Register");
+            }
+            else
+            {
+                var repoUser = _userRepo.Save(user);   //save
+                return RedirectToAction("Index", "User", new { });  //view and show, redirect on this page
+            }
         }
+
+        // GET: Register
+        [CustomAuthorize(permissionEntity = "Users")]
+        public ActionResult Register()
+        {
+            PMSEntities1 db = new PMSEntities1();
+            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
+            //SelectList list = new SelectList(Getlist, "Id", "Title");
+            ViewBag.RolesList = roles;
+            return View();
+        }
+
+        [CustomAuthorize(permissionEntity = "Users")]
+        public ActionResult ViewDetails(int id)
+        {
+            ViewBag.UserDetail = _userRepo.GetUser(id);
+            return View();
+        }
+
+        [CustomAuthorize(permissionEntity = "Users")]
+        public ActionResult Edit(int id)
+        {
+            var User = _userRepo.GetUser(id);
+            PMSEntities1 db = new PMSEntities1();
+            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician").ToList();
+            //SelectList list = new SelectList(Getlist, "Id", "Title");
+            ViewBag.RolesList = roles;
+
+            return View("Register", User);
+        }
+
+        [CustomAuthorize(permissionEntity = "Users")]
+        public ActionResult Delete(int id)
+        {
+            bool deleted = _userRepo.Delete(id);
+            return RedirectToAction("Index", "user", new { });
+        }
+
+        #endregion
+
         [CustomAuthorize]
         public ActionResult SavePermission(UserPermission userpermission)
         {
@@ -52,14 +104,22 @@ namespace PMS.Controllers
                                                 //  return RedirectToAction("~/User");
         }
 
-        [CustomAuthorize]
-
-        public ActionResult ViewDetails(int id)
+        [CustomAuthorize(permissionEntity = "Permissions")]
+        public ActionResult ViewPermissionDetails(int id)
         {
-            ViewBag.UserDetail = _userRepo.GetUser(id);
+            ViewBag.PermissionDetail = _userRepo.GetUserP(id);
 
             return View();
 
+        }
+
+        [CustomAuthorize(permissionEntity = "Permissions")]
+        public ActionResult IndexPermission()
+        {
+            var users = _userRepo.GetUsersP().Where(p => p.RoleId != 1).ToList();
+            // When we use view data then we don't need to cast its type on the view side. While when we don't need type casting in case of viewbag 
+            ViewBag.users = users;   // its a container that takes the value from controller and passes it to view, it can contain any string or object
+            return View(users);   // it ll map the model on view that we can use there to show/list the values from DB, can use one of them at a time
         }
 
         //[HttpPost]
@@ -79,6 +139,7 @@ namespace PMS.Controllers
             return PartialView("_PartialPhysicians");
             //return "response done";
         }
+
         [CustomAuthorize]
         public ActionResult DeassociatePhysician(int recid, int patientId)
         {
@@ -90,45 +151,33 @@ namespace PMS.Controllers
             //return "response done";
         }
 
-        // GET: Register
         [CustomAuthorize]
-
-        public ActionResult Register()
-        {
-            PMSEntities1 db = new PMSEntities1();
-            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
-            //SelectList list = new SelectList(Getlist, "Id", "Title");
-            ViewBag.RolesList = roles;
-
-
-            return View();
-        }
-        [CustomAuthorize]
-
         public ActionResult RegisterPermission()
         {
 
             SetRolesAndModules();
             return View();
         }
-        [CustomAuthorize]
 
-        public ActionResult Delete(int id)
+        [CustomAuthorize(permissionEntity = "Permissions")]
+        public ActionResult DeletePermission(int id)
         {
-            bool deleted = _userRepo.Delete(id);
-            return RedirectToAction("Index", "user", new { });
+            bool deleted = _userRepo.DeleteP(id);
+            return RedirectToAction("IndexPermission", "user", new { });
+
         }
-        [CustomAuthorize]
-        public ActionResult Edit(int id)
+
+        [CustomAuthorize(permissionEntity = "Permissions")]
+        public ActionResult EditPermission(int id)
         {
-            var User = _userRepo.GetUser(id);
+            var User = _userRepo.GetUserP(id);
             PMSEntities1 db = new PMSEntities1();
-            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician").ToList();
-            //SelectList list = new SelectList(Getlist, "Id", "Title");
-            ViewBag.RolesList = roles;
+            SetRolesAndModules();
 
-            return View("Register", User);
+
+            return View("RegisterPermission", User);
         }
+
         [AllowAnonymous]
         public ActionResult Login()
         {
@@ -143,6 +192,7 @@ namespace PMS.Controllers
             Session.Abandon(); // flush all of the sessions 
             return RedirectToAction("Login", "User", new { });
         }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Authenticate(string txtUserName, string txtPassword)
@@ -158,7 +208,6 @@ namespace PMS.Controllers
             return View("Login");
         }
 
-
         public void SetRolesAndModules()
         {
             PMSEntities1 db = new PMSEntities1();
@@ -168,6 +217,13 @@ namespace PMS.Controllers
             var modules = db.Modules.ToList();
             ViewBag.ModulesList = modules;
         }
+
+        [HttpPost]
+        public bool IsValid(string UserName)
+        {
+            return _userRepo.ValidateUser(UserName);
+        }
+
     }
 
 }

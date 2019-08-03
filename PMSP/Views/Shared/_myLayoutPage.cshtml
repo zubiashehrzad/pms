@@ -99,8 +99,8 @@
                                     </div>
                                     <div class="mr-5">Users</div>
                                 </div>
-                                <a class="card-footer text-white clearfix small z-1" href="~/User/Register">
-                                    <span class="float-left">View Details</span>
+                                <a class="card-footer text-white clearfix small z-1" href="~/User/Index">
+                                    <span class="float-left">View List</span>
                                     <span class="float-right">
                                         <i class="fas fa-angle-right"></i>
                                     </span>
@@ -109,7 +109,7 @@
                         </div>
                     }
 
-                    @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module.ModuleName == "Physicians"))
+                    @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module != null && p.Module.ModuleName == "Physicians"))
                     {
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <div class="card text-white bg-warning o-hidden h-100">
@@ -120,7 +120,7 @@
                                     <div class="mr-5">Physicians</div>
                                 </div>
                                 <a class="card-footer text-white clearfix small z-1" href="~/Physician/Index">
-                                    <span class="float-left">View Details</span>
+                                    <span class="float-left">View List</span>
                                     <span class="float-right">
                                         <i class="fas fa-angle-right"></i>
                                     </span>
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                     }
-                    @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module.ModuleName == "Patients"))
+                    @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module != null && p.Module.ModuleName == "Patients"))
                     {
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <div class="card text-white bg-warning o-hidden h-100">
@@ -139,35 +139,40 @@
                                     <div class="mr-5">Patients</div>
                                 </div>
                                 <a class="card-footer text-white clearfix small z-1" href="~/Patient/Index">
-                                    <span class="float-left">View Details</span>
+                                    <span class="float-left">View List</span>
                                     <span class="float-right">
                                         <i class="fas fa-angle-right"></i>
                                     </span>
                                 </a>
                             </div>
                         </div>
-                    }
+                    } 
+                   @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions"))
 
 
-                    @if (currentUser.Role.UserPermissions.Count > 0 && currentUser.Role.UserPermissions.Any(p => p.Module.ModuleName == "Permissions"))
-                    {
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="card text-white bg-warning o-hidden h-100">
-                                <div class="card-body">
-                                    <div class="card-body-icon">
-                                        <i class="fas fa-fw fa-list"></i>
-                                    </div>
-                                    <div class="mr-5">Permission</div>
+                   {
+
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-warning o-hidden h-100">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <i class="fas fa-fw fa-list"></i>
                                 </div>
-                                <a class="card-footer text-white clearfix small z-1" href="~/User/RegisterPermission">
-                                    <span class="float-left">Specify Access</span>
-                                    <span class="float-right">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
+                                <div class="mr-5">Permission </div>
                             </div>
+                            <a class="card-footer text-white clearfix small z-1" href="~/User/IndexPermission">
+                                <span class="float-left">View List</span>
+                                <span class="float-right">
+                                    <i class="fas fa-angle-right"></i>
+                                </span>
+                            </a>
                         </div>
-                    }
+                    </div>
+
+
+                   }
+
+
                     <!-- Area Chart Example-->
 
 

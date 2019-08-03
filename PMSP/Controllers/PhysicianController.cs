@@ -18,16 +18,16 @@ namespace PMS.Controllers
         UserRepo _userRepo = new UserRepo();
 
         // GET: Physician
+        [CustomAuthorize(permissionEntity = "Physicians")]
         public ActionResult Index()
         {
-
             var Physicians = _physicianRepo.GetPhysicians();
             ViewData["Physicians"] = Physicians;
             ViewBag.Physicians = Physicians;
             return View(Physicians);
-
         }
 
+        [CustomAuthorize(permissionEntity = "Physicians")]
         public ActionResult Add()
         {
             PMSEntities1 db = new PMSEntities1();
@@ -37,6 +37,9 @@ namespace PMS.Controllers
             return View();
         }
 
+        [CustomAuthorize(permissionEntity = "Physicians")]
+        [ValidateAntiForgeryToken] //chk that request is secure or not and comming from our own application,
+        [HttpPost]
         public ActionResult Save(User physician)
         {
             int userId = _userRepo.Save(physician);
@@ -45,17 +48,21 @@ namespace PMS.Controllers
             return RedirectToAction("Index", "Physician", new { });
         }
 
+        [CustomAuthorize(permissionEntity = "Physicians")]
         public ActionResult Edit(int id)
         {
             var physician = _physicianRepo.GetPhysician(id);
             return View("Add", physician);
         }
 
+        [CustomAuthorize(permissionEntity = "Physicians")]
         public ActionResult Delete(int id)
         {
             bool deleted = _physicianRepo.Delete(id);
             return RedirectToAction("Index", "Physician", new { });
         }
+
+        [CustomAuthorize(permissionEntity = "Physicians")]
         public ActionResult ViewDetails(int id)
         {
             ViewBag.PhysicianDetail = _physicianRepo.GetPhysician(id);

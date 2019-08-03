@@ -7,7 +7,7 @@
 <form method="post" action="@Url.Action("../User/SavePermission")">
     <div class="container">
         <div class="card card-register mx-auto mt-5">
-            <div class="card-header">Register Permission</div>
+            <div class="card-header">Permission</div>
             <div class="card-body">
                 @if (ViewBag.message != null)
                 {
@@ -40,7 +40,7 @@
                                     <option id="0">---Select Module---</option>
                                     @foreach (PMS.Models.Module module in ViewBag.ModulesList)
                                     {
-                                        <option id="@module.Id" @(Model != null && Model.Id == module.Id ? "selected" : "") value="@module.Id">@module.ModuleName</option>
+                                        <option id="@module.Id" @(Model != null && Model.ModuleId == module.Id ? "selected" : "") value="@module.Id">@module.ModuleName</option>
 
                                     }
                                 </select>
@@ -50,41 +50,41 @@
                     </div>
                 </div>
 
-                Can View <input type="checkbox" id="chk_CanView" name="CanView" @(Model != null && Model.CanView ? "checked" : "") value="@(Model != null && Model.CanView ? "true" : "false")" onchange="setValue(this)" /> <br/>
-                Can View <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete ? "checked" : "") value="@(Model != null && Model.CanDelete ? "true" : "false")" onchange="setValue(this)" /><br />
-                Can View <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite ? "checked" : "") value="@(Model != null && Model.CanWrite ? "true" : "false")" onchange="setValue(this)" /><br />
+
+                <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete ? "checked" : "") value="@(Model != null && Model.CanDelete ? "true" : "false")" onchange="setValue(this)" /><label>Can Delete</label><br />
+                <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite ? "checked" : "") value="@(Model != null && Model.CanWrite ? "true" : "false")" onchange="setValue(this)" /><label>Can Write</label><br />
                 @*<div class="form-group">
-            <div class="form-row">
-                <div class="col-md-6">
-                    <div class="form-label-group">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-label-group">
 
-                        <input type="checkbox" id="chk_CanView" name="CanView" @(Model != null && Model.CanView == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
+                                    <input type="checkbox" id="chk_CanView" name="CanView" @(Model != null && Model.CanView == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
 
-                        <label>Can View</label>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-label-group">
-                            <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
+                                    <label>Can View</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="checkbox" id="chk_CanWrite" name="CanWrite" @(Model != null && Model.CanWrite == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
 
-                            <label>Can Write</label>
+                                        <label>Can Write</label>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                        <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
+
+                                        <label>Can Delete</label>
+                                    </div>
+
+
+                                </div>
+                            </div>
                         </div>
 
-
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-label-group">
-                            <input type="checkbox" id="chk_CanDelete" name="CanDelete" @(Model != null && Model.CanDelete == true ? "checked" : "") value="@(Model != null ? Model.CanView : false)" onclick="setValue(this);" />
-
-                            <label>Can Delete</label>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>*@
+                    </div>*@
                 <button type="submit" class="btn btn-primary btn-block">Save</button>
 
             </div>
@@ -96,5 +96,5 @@
 <script type="text/javascript">
     function setValue(obj) {
         obj.value = obj.checked;
-   }
+    }
 </script>

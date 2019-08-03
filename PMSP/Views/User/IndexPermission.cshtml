@@ -1,0 +1,76 @@
+﻿@model List<PMS.Models.UserPermission>
+         
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+    //List<PMS.Models.User> users = ViewBag.users;
+    //List<PMS.Models.User> vUsers = (List<PMS.Models.User>)ViewData["users"];
+
+    var user1 = (PMS.Models.User)Session["User"];
+    var permissions = user1.Role.UserPermissions;
+
+}
+
+<!-- DataTables Example -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Record Of Users
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Module</th>
+                        <th>Can Write</th>
+                        <th>Can Delete</th>
+                        
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tfoot>
+
+                </tfoot>
+                <tbody>
+
+                   
+
+                    @foreach (var userPermission in Model)    //if we are using view bag methodology then we need to give view bag parametre here its users, if we are using view data methodology then we need to give  vusers parameter, in this loop  insted of Model in both cases
+                    {
+                    <tr>
+                        <td>
+                            @userPermission.Role.Title
+                        </td>
+                        <td>
+                            @userPermission.Module.ModuleName
+                        </td>
+
+                        <td>@(userPermission.CanWrite)</td>
+
+                        <td>@(userPermission.CanDelete)</td>
+
+
+                        <td>
+                            @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions" && p.CanDelete))
+                            {
+                                <a href="~/User/DeletePermission/@userPermission.Id">Delete</a> <span>|</span>
+                            }
+                            @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions" && p.CanWrite))
+                            {
+                                <a href="~/User/EditPermission/@userPermission.Id">Edit</a> <span>|</span>
+                            }
+                            <a href="~/User/ViewPermissionDetails/@userPermission.Id">View</a>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+

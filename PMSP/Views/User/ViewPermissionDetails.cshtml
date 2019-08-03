@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "ViewDetails";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+
+    var permissionDetail = ViewBag.PermissionDetail;
+}
+<form>
+
+
+    <h2>View Permission Details</h2>
+
+    <label>Role:</label> @(permissionDetail.Role.Title)<br />
+    <label>Module:</label> @(permissionDetail.Module.ModuleName)<br />
+
+    <label>Can Write:</label>@(permissionDetail.CanWrite)<br />
+    <label>Can Delete:</label> @(permissionDetail.CanDelete)<br />
+
+
+
+</form>
+
+
+
+

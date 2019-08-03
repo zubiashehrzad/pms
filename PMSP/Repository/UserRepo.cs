@@ -12,19 +12,68 @@ namespace PMS.Repository
 
         public User GetUserByName(string UserName, string Password)
         {
-            var user = _db.Users.Include("Role.UserPermissions").Where(u => u.UserName == UserName && u.Password == Password).SingleOrDefault();
-            return user;
+            try
+            {
+                var user = _db.Users.Include("Role.UserPermissions").Where(u => u.UserName == UserName && u.Password == Password).SingleOrDefault();
+                return user;
+            }
+            catch(Exception ex)
+            { 
+            return new User(); //ex.Message (this ll give u detail of error msg detail, so we can save to db)
+            }
         }
 
         public List<User> GetUsers()
         {
+            try { 
             return _db.Users.ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<User>();   // its called initialize object
+            }
+        }
+
+        public List<UserPermission> GetUsersP()
+        {
+            try
+            { 
+            return _db.UserPermissions.ToList();
+            }
+            catch (Exception ex)
+            { 
+            return new List<UserPermission>();
+            }
+
+
         }
 
         public User GetUser(int id)
         {
-            return _db.Users.Find(id);
+            try
+            {
+                return _db.Users.Find(id);
+            }
+            catch(Exception ex)
+            {
+                return new User();
+            }
+            
         }
+
+        public UserPermission GetUserP(int id)
+        {
+            try
+            { 
+            return _db.UserPermissions.Find(id);
+            }
+            catch(Exception ex)
+            {
+                return new UserPermission();
+            }
+        }
+
+
 
         /// <summary>
         /// We can use this method to save new user to database or we can update an existing user to the databse.
@@ -33,6 +82,9 @@ namespace PMS.Repository
         /// <returns></returns>
         public int Save(User user)
         {
+            try
+            {
+                
             if (user.Id > 0)
                 _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
             else
@@ -40,32 +92,44 @@ namespace PMS.Repository
             //db.Users.Add(user);
             _db.SaveChanges();
             return user.Id;
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
         }
 
 
         public int SavePermission(UserPermission userpermission)
         {
-            int roleId = userpermission.RoleId;
-            int moduleId = userpermission.ModuleId;
+            try
+            {
+                int roleId = userpermission.RoleId;
+                int moduleId = userpermission.ModuleId;
 
-            var existingPermissions = _db.UserPermissions.Where(u => u.RoleId == roleId && u.ModuleId == moduleId).FirstOrDefault();
-            if (existingPermissions != null && existingPermissions.Id > 0)
-            {
-                existingPermissions.CanView = userpermission.CanView;
-                existingPermissions.CanWrite = userpermission.CanWrite;
-                existingPermissions.CanDelete = userpermission.CanDelete;
+                var existingPermissions = _db.UserPermissions.Where(u => u.RoleId == roleId && u.ModuleId == moduleId).FirstOrDefault();
+                if (existingPermissions != null && existingPermissions.Id > 0)
+                {
+                    existingPermissions.CanView = userpermission.CanView;
+                    existingPermissions.CanWrite = userpermission.CanWrite;
+                    existingPermissions.CanDelete = userpermission.CanDelete;
+                }
+                else if (userpermission.Id > 0)
+                {
+                    _db.Entry(userpermission).State = System.Data.Entity.EntityState.Modified;
+                }
+                else
+                {
+                    _db.Entry(userpermission).State = System.Data.Entity.EntityState.Added;
+                }
+                //_db.Users.Add(user);
+                _db.SaveChanges();
+                return userpermission.Id;
             }
-            else if (userpermission.Id > 0)
+            catch(Exception ex)
             {
-                _db.Entry(userpermission).State = System.Data.Entity.EntityState.Modified;
+                return 0;
             }
-            else
-            {
-                _db.Entry(userpermission).State = System.Data.Entity.EntityState.Added;
-            }
-            //_db.Users.Add(user);
-            _db.SaveChanges();
-            return userpermission.Id;
         }
 
         public bool Delete(int id)
@@ -84,10 +148,53 @@ namespace PMS.Repository
             }
         }
 
+        public bool DeleteP(int id)
+        {
+            try
+            {
+                var user = _db.UserPermissions.Find(id);
+              
+                _db.Entry(user).State = System.Data.Entity.EntityState.Deleted;
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //we can log exception to db
+                return false;
+            }
+        }
+
+
+
         public bool Validate(string txtUserName, string txtPassword)
         {
-            bool isValid = _db.Users.Any(u => u.UserName == txtUserName && u.Password == txtPassword);
-            return isValid;
+            try
+            {
+
+                bool isValid = _db.Users.Any(u => u.UserName == txtUserName && u.Password == txtPassword);
+                return isValid;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool ValidateUser(string txtUserName)
+        {
+            try
+            {
+                bool isValid = _db.Users.Any(u => u.UserName == txtUserName);
+                return isValid;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+           
         }
     }
+
+
 }

@@ -139,8 +139,8 @@ C:\GitProjects\pms\PMSP\bin\System.Web.Webpages.Razor.xml
 C:\GitProjects\pms\PMSP\bin\System.Web.Helpers.xml
 C:\GitProjects\pms\PMSP\bin\System.Web.Mvc.xml
 C:\GitProjects\pms\PMSP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\GitProjects\pms\PMSP\obj\Debug\PMS.csprojAssemblyReference.cache
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.csproj.CoreCompileInputs.cache
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.csproj.CopyComplete
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.dll
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.pdb
+C:\GitProjects\pms\PMSP\obj\Debug\PMS.csprojAssemblyReference.cache

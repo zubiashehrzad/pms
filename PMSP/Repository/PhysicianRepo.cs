@@ -12,23 +12,44 @@ namespace PMS.Repository
 
         public List<Physician> GetPhysicians()
         {
+            try { 
             return _db.Physicians.ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<Physician>();
+            }
         }
 
         public Physician GetPhysician(int id)
         {
+            try { 
             return _db.Physicians.Find(id);
+            }
+            catch(Exception ex)
+            {
+                return new Physician(); 
+            }
         }
 
         public int Save(Physician physician)
         {
-            if (physician.Id > 0)
-                _db.Entry(physician).State = System.Data.Entity.EntityState.Modified;
-            else
-                _db.Entry(physician).State = System.Data.Entity.EntityState.Added;
-            //_db.Users.Add(user);
-            _db.SaveChanges();
-            return physician.Id;
+            try
+            {
+                if (physician.Id > 0)
+                    _db.Entry(physician).State = System.Data.Entity.EntityState.Modified;
+                else
+                    _db.Entry(physician).State = System.Data.Entity.EntityState.Added;
+                //_db.Users.Add(user);
+                _db.SaveChanges();
+                return physician.Id;
+            
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
+            
         }
 
         public bool Delete(int id)
