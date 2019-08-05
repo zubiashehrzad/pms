@@ -8,6 +8,10 @@
     @Html.AntiForgeryToken()
     <div class="container">
         <div class="card card-register mx-auto mt-5">
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Message</div>
+            }
             <div class="card-header">Physician Information</div>
 
 
@@ -60,12 +64,11 @@
                         <div class="form-label-group">
                             <input type="text" id="inputuserName" name="UserName" value="@(Model != null ? Model.User.UserName : "")" class="form-control" placeholder="Username" required="required">
                             <label for="inputuserName">User Name</label>
-
-
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-label-group">
+                            <font color="red">  <label id="lbl_invalidUser"></label> </font>
                         </div>
                     </div>
                 </div>
@@ -92,7 +95,7 @@
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="form-label-group">
-                            <input type="tel" id="inputphone" name="Phone" value="@(Model != null ? Model.User.Phone : "")" class="form-control" placeholder=phone" required="required" autofocus="autofocus">
+                            <input type="tel" id="inputphone" name="Phone" value="@(Model != null ? Model.User.Phone : "")" class="form-control" placeholder="phone" required="required" autofocus="autofocus">
                             <label for="inputphone">Phone</label>
                         </div>
                     </div>
@@ -105,21 +108,31 @@
                             </select>
                         </div>
                         @*@Html.DropDownList("Gender", new List<SelectListItem>{
-                            new SelectListItem{ Text="Male", Value="1"},
-                            new SelectListItem{ Text="Female", Value="2"}
-                            }, "--- Select ---"
-                            )*@
+                    new SelectListItem{ Text="Male", Value="1"},
+                    new SelectListItem{ Text="Female", Value="2"}
+                    }, "--- Select ---"
+                    )*@
                     </div>
 
                 </div>
             </div>    <!––phone,gender-->
 
             <div class="form-group">
-                <div class="form-label-group">
-                    <input type="email" id="inputEmail" name="Email" value="@(Model != null ? Model.User.Email : " ")" class="form-control" placeholder="Email address" required="required">
-                    <label for="inputEmail">Email address</label>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" name="Email" value="@(Model != null ? Model.User.Email : " ")" class="form-control" placeholder="Email address" required="required">
+                            <label for="inputEmail">Email address</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <font color="red">  <label id="lbl_invalidEmail"></label></font>
+                        </div>
+                    </div>
                 </div>
-            </div>     <!–– email-->
+            </div>
+            <!–– email-->
 
             <div class="form-group">
                 <div class="form-label-group">
@@ -183,9 +196,67 @@
             <button type="submit" class="btn btn-primary btn-block">Register Physician</button>
         </div>
 
-    </div>
+            </div>
 </form>
-    
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#inputuserName").change(function () {
+            //alert('value changed');
+            var username = $(this).val();
+            //alert(username);
+            $.ajax({
+                url: "@Url.Content("~/Physician/IsValid")",
+                type: "POST",
+                data: { UserName: username },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidUser").html("This user name is already taken, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidUser").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#inputEmail").change(function () {
+            //alert('value changed');
+            var email = $(this).val();
+          //  alert(email);
+            $.ajax({
+                url: "@Url.Content("~/Physician/IsEmailValid")",
+                type: "POST",
+                data: { Email: email },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidEmail").html("This email already exists, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidEmail").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>
+
+
 
 
 

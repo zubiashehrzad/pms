@@ -42,10 +42,20 @@ namespace PMS.Controllers
         [HttpPost]
         public ActionResult Save(User physician)
         {
+            if(IsValid(physician.UserName))
+            {
+                ViewBag.Message = "User name already exists, please try another user name!";
+                PMSEntities1 db = new PMSEntities1();
+                return View("Add");
+
+            }
+            else
+            { 
             int userId = _userRepo.Save(physician);
             physician.Physicians.First().UserId = userId;
             _physicianRepo.Save(physician.Physicians.First());
             return RedirectToAction("Index", "Physician", new { });
+            }
         }
 
         [CustomAuthorize(permissionEntity = "Physicians")]
@@ -68,6 +78,18 @@ namespace PMS.Controllers
             ViewBag.PhysicianDetail = _physicianRepo.GetPhysician(id);
             return View();
 
+        }
+
+        [HttpPost]
+        public bool IsValid(string UserName)
+        {
+            return _userRepo.ValidateUser(UserName);
+        }
+
+        [HttpPost]
+        public bool IsEmailValid(string Email)
+        {
+            return _physicianRepo.ValidateEmail(Email);
         }
     }
 }

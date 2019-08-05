@@ -167,7 +167,7 @@ namespace PMS.Repository
 
 
 
-        public bool Validate(string txtUserName, string txtPassword)
+        public bool Validate(string txtUserName, string txtPassword)//// login
         {
             try
             {
@@ -181,7 +181,7 @@ namespace PMS.Repository
             }
         }
 
-        public bool ValidateUser(string txtUserName)
+        public bool ValidateUser(string txtUserName)  //chks that username already exists
         {
             try
             {
@@ -192,8 +192,23 @@ namespace PMS.Repository
             {
                 return false;
             }
-           
         }
+
+        public bool ValidateEmail(string txtEmail)  //chks that email already exists
+        {
+            try
+            {
+                bool isValid = _db.Users.Any(u => u.Email == txtEmail);
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+
     }
 
 

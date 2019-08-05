@@ -56,6 +56,15 @@ namespace PMS.Controllers
         [HttpPost]
         public ActionResult Save(User patient)
         {
+            if (IsValid(patient.UserName))
+            {
+                ViewBag.Message = "User name already exists, please try another user name!";
+                PMSEntities1 db = new PMSEntities1();
+                return View("Add");
+
+            }
+            else
+            { 
             int userId = _userRepo.Save(patient);
             patient.Patients.First().UserId = userId;
             int pateintId = _patientRepo.Save(patient.Patients.First());
@@ -63,6 +72,7 @@ namespace PMS.Controllers
             patient.Patients.First().PatientPhysicians.First().PatientId = pateintId;
             _patientRepo.SavePatientPhysician(patient.Patients.First().PatientPhysicians.First());
              return RedirectToAction("Index", "Patient", new { });
+            }
 
         }
 
@@ -78,6 +88,18 @@ namespace PMS.Controllers
         {
             bool deleted = _patientRepo.Delete(id);
             return RedirectToAction("Index", "Patient", new { });
+        }
+
+        [HttpPost]
+        public bool IsValid(string UserName)
+        {
+            return _userRepo.ValidateUser(UserName);
+        }
+
+        [HttpPost]
+        public bool IsEmailValid(string Email)
+        {
+            return _patientRepo.ValidateEmail(Email);
         }
     }
 }

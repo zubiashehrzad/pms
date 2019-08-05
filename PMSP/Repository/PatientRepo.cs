@@ -12,7 +12,8 @@ namespace PMS.Repository
 
         public List<Patient> GetPatients()
         {
-            try { 
+            try
+            { 
             return _db.Patients.ToList();
             }
             catch(Exception ex)
@@ -23,19 +24,33 @@ namespace PMS.Repository
 
         public Patient GetPatient(int id)
         {
+            try { 
             return _db.Patients.Find(id);
+            }
+            catch(Exception ex)
+            {
+                return new Patient();
+            }
         }
 
         public int SavePatientPhysician(PatientPhysician patientphysician)
         {
-            if (patientphysician.Id > 0)
-                _db.Entry(patientphysician).State = System.Data.Entity.EntityState.Modified;
-            else
-                _db.Entry(patientphysician).State = System.Data.Entity.EntityState.Added;
-            //_db.Users.Add(user);
-            _db.SaveChanges();
-            return patientphysician.Id;
-        }
+            try
+            {
+                if (patientphysician.Id > 0)
+                    _db.Entry(patientphysician).State = System.Data.Entity.EntityState.Modified;
+                else
+                    _db.Entry(patientphysician).State = System.Data.Entity.EntityState.Added;
+                //_db.Users.Add(user);
+                _db.SaveChanges();
+                return patientphysician.Id;
+
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
+                   }
 
         public bool RemovePatientPhysician(int id)
         {
@@ -55,18 +70,33 @@ namespace PMS.Repository
 
         public List<PatientPhysician> GetPatientPhysicians(int patientId)
         {
-            return _db.PatientPhysicians.Include("Physician.User").Where(u => u.PatientId == patientId).ToList();
+            try
+            {
+                return _db.PatientPhysicians.Include("Physician.User").Where(u => u.PatientId == patientId).ToList();
+            }
+            catch(Exception ex)
+            {
+                return new List<PatientPhysician>();
+            }
+            
         }
 
         public int Save(Patient patient)
         {
-            if (patient.Id > 0)
-                _db.Entry(patient).State = System.Data.Entity.EntityState.Modified;
-            else
-                _db.Entry(patient).State = System.Data.Entity.EntityState.Added;
-            //_db.Users.Add(user);
-            _db.SaveChanges();
-            return patient.Id;
+            try
+            {
+                if (patient.Id > 0)
+                    _db.Entry(patient).State = System.Data.Entity.EntityState.Modified;
+                else
+                    _db.Entry(patient).State = System.Data.Entity.EntityState.Added;
+                //_db.Users.Add(user);
+                _db.SaveChanges();
+                return patient.Id;
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
         }
 
         public bool Delete(int id)
@@ -86,6 +116,19 @@ namespace PMS.Repository
             {
                 return false;
             }
+        }
+        public bool ValidateEmail(string txtEmail)  //chks that email already exists
+        {
+            try
+            {
+                bool isValid = _db.Users.Any(u => u.Email == txtEmail);
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }

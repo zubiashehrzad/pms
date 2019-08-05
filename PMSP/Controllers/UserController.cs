@@ -35,14 +35,25 @@ namespace PMS.Controllers
         [HttpPost] // chk request type, all of these 3 are action filters
         public ActionResult Save(User user)
         {
-            if (IsValid(user.UserName))
+            if ((IsValid(user.Email)) || (IsValid(user.UserName)))
             {
-                ViewBag.Message = "Username already taken, please try with a different username!";
-                PMSEntities1 db = new PMSEntities1();
-                var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
-                ViewBag.RolesList = roles;
+                ViewBag.Message = "Username or Email already exists, please try with a different username and email address!";
+                RoleList();
                 return View("Register");
             }
+          /* 
+            else if (IsValid(user.Email))
+            {
+                ViewBag.Message = "Email already exists, please try with a different email address!";
+                RoleList();
+                return View("Register");
+            }
+            else if (IsValid(user.UserName))
+                 {
+                ViewBag.Message = "Username already exists, please try with a different username!";
+                RoleList();
+                return View("Register");
+            }*/
             else
             {
                 var repoUser = _userRepo.Save(user);   //save
@@ -54,10 +65,7 @@ namespace PMS.Controllers
         [CustomAuthorize(permissionEntity = "Users")]
         public ActionResult Register()
         {
-            PMSEntities1 db = new PMSEntities1();
-            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
-            //SelectList list = new SelectList(Getlist, "Id", "Title");
-            ViewBag.RolesList = roles;
+            RoleList();
             return View();
         }
 
@@ -154,7 +162,6 @@ namespace PMS.Controllers
         [CustomAuthorize]
         public ActionResult RegisterPermission()
         {
-
             SetRolesAndModules();
             return View();
         }
@@ -222,6 +229,20 @@ namespace PMS.Controllers
         public bool IsValid(string UserName)
         {
             return _userRepo.ValidateUser(UserName);
+        }
+
+        [HttpPost]
+        public bool IsEmailValid(string Email)
+        {
+            return _userRepo.ValidateEmail(Email);
+        }
+
+        public void RoleList()
+        {
+            PMSEntities1 db = new PMSEntities1();
+            var roles = db.Roles.Where(r => r.Title != "Patient" && r.Title != "Physician" && r.Title != "Admin").ToList();
+            ViewBag.RolesList = roles;
+
         }
 
     }

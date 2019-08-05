@@ -56,8 +56,8 @@
                         <div class="col-md-6">
                             <div class="form-label-group" style="width:100%;">
                                 <!--
-                            <input type="number" id="inputrole_Id" name="Role_Id" class="form-control" placeholder="Role" required="required">
-                            <label for="inputrole_Id">Role</label>  -->
+                    <input type="number" id="inputrole_Id" name="Role_Id" class="form-control" placeholder="Role" required="required">
+                    <label for="inputrole_Id">Role</label>  -->
                                 @*@Html.DropDownList("Role_Id", ViewBag.RolesList as SelectList, "Choose Role")*@
 
 
@@ -72,19 +72,25 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
                         <div class="col-md-6">
-                            <label id="lbl_invalidUser" class="alert-danger"></label>
                             <div class="form-label-group">
-                                <input type="text" id="inputuserName" name="UserName" value="@(Model !=null? Model.UserName:"")" class="form-control" placeholder="Username" required="required" onfocus="validateusername()">
+                                <input type="text" id="inputuserName" name="UserName" value="@(Model !=null? Model.UserName:"")" class="form-control" placeholder="Username" required="required">
                                 <label for="inputuserName">User Name</label>
                             </div>
-
-
-
-
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-label-group">
+                                <font color="red"> <label id="lbl_invalidUser"></label> </font>
+</div>
                         </div>
                     </div>
-                </div>   <!–– user name,role-->
+                </div>
+
+                <!–– user name,role-->
 
                 <div class="form-group">
                     <div class="form-row">
@@ -113,45 +119,46 @@
                         </div>
                         <div class="col-md-6">
 
-                            <!--
-                        <div class="form-label-group">
-                              <input type="number" id="inputgender" name="Gender" class="form-control" placeholder="Gender" required="required">
-                              <label for="inputgender">Gender</label>
-                        </div> -->
-
-
                             <div class="form-label-group">
                                 <select id="inputGender" name="Gender" style="width:100%;">
                                     <option value="0">--Select Gender--</option>
                                     <option value="1" @(Model != null && Model.Gender == 1 ? "selected" : "")>Male</option>
-                                    <option value="2" @(Model != null && Model.Gender == 2 ? "selected" : "")>Fe Male</option>
+                                    <option value="2" @(Model != null && Model.Gender == 2 ? "selected" : "")>FeMale</option>
                                 </select>
 
                             </div>
-
-
-
 
                         </div>
                     </div>
                 </div>
                 <!––phone,gender-->
-
                 <div class="form-group">
-                    <div class="form-label-group">
-                        <input type="email" id="inputEmail" name="Email" value="@(Model !=null? Model.Email:"")" class="form-control" placeholder="Email address" required="required">
-                        <label for="inputEmail">Email address</label>
-                    </div>
-                </div>     <!–– email-->
+                    <div class="form-row">
+                        <div class="col-md-6">
+                                <div class="form-label-group">
+                                    <input type="email" id="inputEmail" name="Email" value="@(Model !=null? Model.Email:"")" class="form-control" placeholder="Email address" required="required">
+                                    <label for="inputEmail">Email address</label>
 
-                <div class="form-group">
-                    <div class="form-label-group">
-                        <input type="text" id="inputaddress" name="Address" value="@(Model !=null? Model.Address:"")" class="form-control" placeholder="address" required="required">
-                        <label for="inputaddress">Address</label>
-                    </div>
-                </div>  <!–– address-->
+                                </div>
+                        </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                                <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <font color="red">  <label id="lbl_invalidEmail" ></label></font>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                <!–– email-->
+
+                            <div class="form-group">
+                                <div class="form-label-group">
+                                    <input type="text" id="inputaddress" name="Address" value="@(Model !=null? Model.Address:"")" class="form-control" placeholder="address" required="required">
+                                    <label for="inputaddress">Address</label>
+                                </div>
+                            </div>  <!–– address-->
+
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
         </div>
     </div>
@@ -172,7 +179,7 @@
                 success: function (reponse) {
                     //alert(reponse);
                     if (reponse == "True") {
-                        $("#lbl_invalidUser").html("This user name is already taken, please try another!");
+                        $("#lbl_invalidUser").html("This user name already exists, please try any other!");
                     }
                     else {
                         $("#lbl_invalidUser").html("");
@@ -183,4 +190,35 @@
 
     });
 
+
+
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#inputEmail").change(function () {
+            //alert('value changed');
+            var email = $(this).val();
+          //  alert(email);
+            $.ajax({
+                url: "@Url.Content("~/User/IsEmailValid")",
+                type: "POST",
+                data: { Email: email },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidEmail").html("This email is already taken, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidEmail").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>
+

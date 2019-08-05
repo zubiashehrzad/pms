@@ -70,5 +70,18 @@ namespace PMS.Repository
                 return false;
             }
         }
+        public bool ValidateEmail(string txtEmail)  //chks that email already exists
+        {
+            try
+            {
+                bool isValid = _db.Users.Any(u => u.Email == txtEmail);
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }

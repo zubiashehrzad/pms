@@ -11,6 +11,10 @@
 
     <div class="container">
         <div class="card card-register mx-auto mt-5">
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Message</div>
+            }
             <div class="card-header">Patient Basic Information</div>
 
 
@@ -61,12 +65,12 @@
                     <div class="col-md-6">
                         <div class="form-label-group">
                             <input type="text" id="inputuserName" name="UserName" value="@(Model != null ? Model.User.UserName : "")" class="form-control" placeholder="Username" required="required">
-                            <label for="inputuserName">User Name</label>
+                            <label for="inputuserName">User Name</label> 
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-label-group">
-
+                            <font color="red">  <label id="lbl_invalidUser"></label> </font>
                         </div>
                     </div>
                 </div>
@@ -115,11 +119,22 @@
             </div>    <!––phone,gender-->
 
             <div class="form-group">
-                <div class="form-label-group">
-                    <input type="email" id="inputEmail" name="Email" class="form-control" value="@(Model != null ? Model.User.Email : "")" placeholder="Email address" required="required">
-                    <label for="inputEmail">Email address</label>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" name="Email" class="form-control" value="@(Model != null ? Model.User.Email : "")" placeholder="Email address" required="required">
+                            <label for="inputEmail">Email address</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <font color="red">  <label id="lbl_invalidEmail"></label></font>
+                        </div>
+                    </div>
                 </div>
-            </div>     <!–– email-->
+            </div>
+
+            <!–– email-->
 
             <div class="form-group">
                 <div class="form-label-group">
@@ -207,23 +222,83 @@
 
 </form>
 
-    <script type="text/javascript">
-        function setValue(obj) {
-            obj.value = obj.checked;
-            if (obj.value == "true") {
-                document.getElementById("inputDisabilityDetails").hidden = false;
-            }
-            else {
-                document.getElementById("inputDisabilityDetails").hidden = true;
-            }
-
-            function defaultHidden() {
-                alert('I am in');
-                document.getElementById("inputDisabilityDetails").hidden = true;
-            }
-
+<script type="text/javascript">
+    function setValue(obj) {
+        obj.value = obj.checked;
+        if (obj.value == "true") {
+            document.getElementById("inputDisabilityDetails").hidden = false;
         }
-    </script>
+        else {
+            document.getElementById("inputDisabilityDetails").hidden = true;
+        }
+
+        function defaultHidden() {
+            alert('I am in');
+            document.getElementById("inputDisabilityDetails").hidden = true;
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#inputuserName").change(function () {
+            //alert('value changed');
+            var username = $(this).val();
+            //alert(username);
+            $.ajax({
+                url: "@Url.Content("~/Patient/IsValid")",
+                type: "POST",
+                data: { UserName: username },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidUser").html("This user name is already taken, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidUser").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#inputEmail").change(function () {
+            //alert('value changed');
+            var email = $(this).val();
+          //  alert(email);
+            $.ajax({
+                url: "@Url.Content("~/Patient/IsEmailValid")",
+                type: "POST",
+                data: { Email: email },
+
+                success: function (reponse) {
+                    //alert(reponse);
+                    if (reponse == "True") {
+                        $("#lbl_invalidEmail").html("This email already exists, please try another!");
+                    }
+                    else {
+                        $("#lbl_invalidEmail").html("");
+                    }
+                }
+        });
+        });
+
+    });
+
+</script>
+
+
+
 
 
 
