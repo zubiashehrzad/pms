@@ -7,8 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using PMS.Models;
 using PMS.Filters;
-
-
+using PMS.SendGridEmailService;
+using System.IO;
 
 namespace PMS.Controllers
 {
@@ -35,25 +35,25 @@ namespace PMS.Controllers
         [HttpPost] // chk request type, all of these 3 are action filters
         public ActionResult Save(User user)
         {
-            if ((IsValid(user.Email)) || (IsValid(user.UserName)))
+            if ((IsEmailValid(user.Email)) || (IsValid(user.UserName)))
             {
                 ViewBag.Message = "Username or Email already exists, please try with a different username and email address!";
                 RoleList();
                 return View("Register");
             }
-          /* 
-            else if (IsValid(user.Email))
-            {
-                ViewBag.Message = "Email already exists, please try with a different email address!";
-                RoleList();
-                return View("Register");
-            }
-            else if (IsValid(user.UserName))
-                 {
-                ViewBag.Message = "Username already exists, please try with a different username!";
-                RoleList();
-                return View("Register");
-            }*/
+            /* 
+              else if (IsValid(user.Email))
+              {
+                  ViewBag.Message = "Email already exists, please try with a different email address!";
+                  RoleList();
+                  return View("Register");
+              }
+              else if (IsValid(user.UserName))
+                   {
+                  ViewBag.Message = "Username already exists, please try with a different username!";
+                  RoleList();
+                  return View("Register");
+              }*/
             else
             {
                 var repoUser = _userRepo.Save(user);   //save
@@ -93,6 +93,20 @@ namespace PMS.Controllers
         {
             bool deleted = _userRepo.Delete(id);
             return RedirectToAction("Index", "user", new { });
+        }
+
+        public ActionResult Upload()
+        {
+            return View();
+        }
+
+        public ActionResult UploadFile(int userId, HttpPostedFileBase fileInfo)
+        {
+            string fileName = Path.GetFileName(fileInfo.FileName);
+            string filePath = Path.Combine(Server.MapPath("~/Files"), userId.ToString() + "-" + DateTime.Now.ToString("MMddyyyyhhmmsstt") + Path.GetExtension(fileInfo.FileName));
+            //string filePath = Url.Content("~/Files/" + fileInfo.FileName);
+            fileInfo.SaveAs(filePath);
+            return RedirectToAction("Index", "User", new { });
         }
 
         #endregion
@@ -188,6 +202,7 @@ namespace PMS.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            ViewBag.Message = TempData["Message"];
             return View();
         }
 
@@ -213,6 +228,45 @@ namespace PMS.Controllers
             }
             ViewBag.Message = "Invalid Username/Password!";
             return View("Login");
+        }
+
+        public ActionResult RcoverPwd(string txtUserName)
+        {
+            var user = _userRepo.GetUserByName(txtUserName);
+            if (user != null)
+            {
+                string url = "http://localhost:62710/User/ChangePassword/" + user.Id;
+                string body = "<p>You have requested for reset password.</p><p>Click here to <a href='" + url + "'>Change Password</a></p>";  // link for small page
+                SendGridEmail.SendEmail(user.Email, "Change Password", body);
+                return RedirectToAction("SuccessMessage", "User", new { });
+            }
+            else
+            {
+                return RedirectToAction("Login", "User", new { });
+            }
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        public ActionResult UpdatePwd(string password, int userId)
+        {
+            _userRepo.Savepwd(userId, password);
+            TempData["Message"] = "Password modified successfully!";   //not using view bag bcz v r not going to view directly, we r redirecting so temp data is using from 1 action to other
+            return RedirectToAction("Login", "User", new { });
+        }
+
+        public ActionResult ChangePassword(int? id)
+        {
+            ViewBag.userId = id;
+            return View();
+        }
+
+        public ActionResult SuccessMessage()
+        {
+            return View();
         }
 
         public void SetRolesAndModules()

@@ -17,16 +17,31 @@ namespace PMS.Repository
                 var user = _db.Users.Include("Role.UserPermissions").Where(u => u.UserName == UserName && u.Password == Password).SingleOrDefault();
                 return user;
             }
-            catch(Exception ex)
-            { 
-            return new User(); //ex.Message (this ll give u detail of error msg detail, so we can save to db)
+            catch (Exception ex)
+            {
+                return new User(); //ex.Message (this ll give u detail of error msg detail, so we can save to db)
+            }
+        }
+
+
+        public User GetUserByName(string UserName)
+        {
+            try
+            {
+                var user = _db.Users.Where(u => u.UserName == UserName).SingleOrDefault();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return new User(); //ex.Message (this ll give u detail of error msg detail, so we can save to db)
             }
         }
 
         public List<User> GetUsers()
         {
-            try { 
-            return _db.Users.ToList();
+            try
+            {
+                return _db.Users.ToList();
             }
             catch (Exception ex)
             {
@@ -37,12 +52,12 @@ namespace PMS.Repository
         public List<UserPermission> GetUsersP()
         {
             try
-            { 
-            return _db.UserPermissions.ToList();
+            {
+                return _db.UserPermissions.ToList();
             }
             catch (Exception ex)
-            { 
-            return new List<UserPermission>();
+            {
+                return new List<UserPermission>();
             }
 
 
@@ -54,20 +69,20 @@ namespace PMS.Repository
             {
                 return _db.Users.Find(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new User();
             }
-            
+
         }
 
         public UserPermission GetUserP(int id)
         {
             try
-            { 
-            return _db.UserPermissions.Find(id);
+            {
+                return _db.UserPermissions.Find(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new UserPermission();
             }
@@ -84,21 +99,38 @@ namespace PMS.Repository
         {
             try
             {
-                
-            if (user.Id > 0)
-                _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-            else
-                _db.Entry(user).State = System.Data.Entity.EntityState.Added;
-            //db.Users.Add(user);
-            _db.SaveChanges();
-            return user.Id;
+
+                if (user.Id > 0)
+                    _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                else
+                    _db.Entry(user).State = System.Data.Entity.EntityState.Added;
+                //db.Users.Add(user);
+                _db.SaveChanges();
+                return user.Id;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return 0;
             }
         }
 
+
+        public int Savepwd(int userId, string password)
+        {
+            try
+            {
+
+                var user = _db.Users.Find(userId);
+                user.Password = password;
+                _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+                return user.Id;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
 
         public int SavePermission(UserPermission userpermission)
         {
@@ -126,7 +158,7 @@ namespace PMS.Repository
                 _db.SaveChanges();
                 return userpermission.Id;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -153,7 +185,7 @@ namespace PMS.Repository
             try
             {
                 var user = _db.UserPermissions.Find(id);
-              
+
                 _db.Entry(user).State = System.Data.Entity.EntityState.Deleted;
                 _db.SaveChanges();
                 return true;
@@ -175,7 +207,7 @@ namespace PMS.Repository
                 bool isValid = _db.Users.Any(u => u.UserName == txtUserName && u.Password == txtPassword);
                 return isValid;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -188,7 +220,7 @@ namespace PMS.Repository
                 bool isValid = _db.Users.Any(u => u.UserName == txtUserName);
                 return isValid;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }

@@ -5,23 +5,67 @@
 
     var user = ViewBag.UserDetail;
 }
-<form>
+
+
+<head>
+    <title>AssociatePhysician</title>
+    <style>
+
+        /* Create three unequal columns that floats next to each other */
+        .column {
+            float: left;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+        .Right {
+            width: 50%;
+        }
+
+        .Left {
+            width: 50%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+
+<form method="post" action="~/User/UploadFile" enctype="multipart/form-data">
 
 
     <h2>View User Details</h2>
-
-    <label>Name:</label> @(user.FirstName + ' ' + user.LastName)<br />
-    <label>DOB:</label> @(user.DOB)<br />
-
-    <label>Gender:</label>@(user.Gender == 1 ? "Male" : "FeMale")<br />
-    <label>Address:</label> @(user.Address)<br />
-    <label>Phone:</label> @(user.Phone)<br />
-    <label>Email:</label> @(user.Email)<br />
-
-    <label>User Name:</label> @(user.UserName)<br />
-    <label>Password:</label> @(user.Password)<br />
+    <div class="row">
 
 
+        <div class="column Left">
+
+            <label>Name:</label> @(user.FirstName + ' ' + user.LastName)<br />
+            <label>DOB:</label> @(user.DOB)<br />
+
+            <label>Gender:</label>@(user.Gender == 1 ? "Male" : "FeMale")<br />
+            <label>Address:</label> @(user.Address)<br />
+            <label>Phone:</label> @(user.Phone)<br />
+            <label>Email:</label> @(user.Email)<br />
+
+            <label>User Name:</label> @(user.UserName)<br />
+            <label>Password:</label> @(user.Password)<br />
+
+        </div>
+
+        <div class="column Right">
+            <h2>Upload Image</h2>
+
+            <input type="hidden" name="userId" value="@user.Id" />
+            Select Image<input type="file" name="fileInfo" />
+            <input type="submit" value="Upload" />
+            </div>
+
+        </div>
 
 </form>
 

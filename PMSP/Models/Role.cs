@@ -18,7 +18,6 @@ namespace PMS.Models
         public Role()
         {
             this.UserPermissions = new HashSet<UserPermission>();
-            this.Users = new HashSet<User>();
         }
     
         public int Id { get; set; }
@@ -26,7 +25,5 @@ namespace PMS.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
     }
 }

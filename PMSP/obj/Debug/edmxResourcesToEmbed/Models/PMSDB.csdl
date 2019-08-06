@@ -82,6 +82,10 @@
       <End Role="UserPermission" EntitySet="UserPermissions" />
     </AssociationSet>
     <EntitySet Name="Roles" EntityType="PMSDBModel.Role" />
+    <AssociationSet Name="FK_UserPermissions_Roles" Association="PMSDBModel.FK_UserPermissions_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="UserPermission" EntitySet="UserPermissions" />
+    </AssociationSet>
     <EntitySet Name="Users" EntityType="PMSDBModel.User" />
     <AssociationSet Name="FK_Patients_Users" Association="PMSDBModel.FK_Patients_Users">
       <End Role="User" EntitySet="Users" />
@@ -90,14 +94,6 @@
     <AssociationSet Name="FK_Physicians_Users" Association="PMSDBModel.FK_Physicians_Users">
       <End Role="User" EntitySet="Users" />
       <End Role="Physician" EntitySet="Physicians" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserPermissions_Roles" Association="PMSDBModel.FK_UserPermissions_Roles">
-      <End Role="Role" EntitySet="Roles" />
-      <End Role="UserPermission" EntitySet="UserPermissions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Users_Roles" Association="PMSDBModel.FK_Users_Roles">
-      <End Role="Role" EntitySet="Roles" />
-      <End Role="User" EntitySet="Users" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Module">
@@ -142,8 +138,19 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
     <NavigationProperty Name="UserPermissions" Relationship="PMSDBModel.FK_UserPermissions_Roles" FromRole="Role" ToRole="UserPermission" />
-    <NavigationProperty Name="Users" Relationship="PMSDBModel.FK_Users_Roles" FromRole="Role" ToRole="User" />
   </EntityType>
+  <Association Name="FK_UserPermissions_Roles">
+    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="PMSDBModel.UserPermission" Role="UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="Id" />
@@ -159,10 +166,11 @@
     <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="Password" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-    <Property Name="Role_Id" Type="Int32" />
+    <Property Name="Role_Id" Type="Int32" Nullable="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+    <Property Name="ImageName" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
     <NavigationProperty Name="Patients" Relationship="PMSDBModel.FK_Patients_Users" FromRole="User" ToRole="Patient" />
     <NavigationProperty Name="Physicians" Relationship="PMSDBModel.FK_Physicians_Users" FromRole="User" ToRole="Physician" />
-    <NavigationProperty Name="Role" Relationship="PMSDBModel.FK_Users_Roles" FromRole="User" ToRole="Role" />
   </EntityType>
   <Association Name="FK_Patients_Users">
     <End Type="PMSDBModel.User" Role="User" Multiplicity="0..1" />
@@ -185,30 +193,6 @@
       </Principal>
       <Dependent Role="Physician">
         <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserPermissions_Roles">
-    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
-    <End Type="PMSDBModel.UserPermission" Role="UserPermission" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserPermission">
-        <PropertyRef Name="RoleId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Users_Roles">
-    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="0..1" />
-    <End Type="PMSDBModel.User" Role="User" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="User">
-        <PropertyRef Name="Role_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

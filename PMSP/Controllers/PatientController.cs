@@ -56,13 +56,14 @@ namespace PMS.Controllers
         [HttpPost]
         public ActionResult Save(User patient)
         {
-            if (IsValid(patient.UserName))
+            if( (IsEmailValid(patient.Email)) || (IsValid(patient.UserName)))
             {
-                ViewBag.Message = "User name already exists, please try another user name!";
+                ViewBag.Message = "User name or Email already exists, please try another user name!";
                 PMSEntities1 db = new PMSEntities1();
                 return View("Add");
 
             }
+            
             else
             { 
             int userId = _userRepo.Save(patient);

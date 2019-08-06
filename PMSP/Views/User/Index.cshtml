@@ -22,6 +22,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>DOB</th>
@@ -51,6 +52,7 @@
                     @foreach (var user in Model)    //if we are using view bag methodology then we need to give view bag parametre here its users, if we are using view data methodology then we need to give  vusers parameter, in this loop  insted of Model in both cases
                     {
                         <tr>
+                            <td> </td>
                             <td>@(user.FirstName + " " + user.LastName)</td>
                             <td>@user.Email</td>
                             <td>@Convert.ToDateTime(user.DOB).ToShortDateString()</td>

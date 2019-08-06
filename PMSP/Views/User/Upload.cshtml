@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
+    var user = (PMS.Models.User)Session["User"];
+}
+
+<h2>Upload</h2>
+<form method="post" action="~/User/UploadFile" enctype="multipart/form-data">
+    <input type="hidden" name="userId" value="@user.Id" />
+    Select Document<input type="file" name="fileInfo" />
+    <input type="submit" value="Upload" />
+</form>
+

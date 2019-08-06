@@ -1,6 +1,6 @@
 ﻿@{
     var user = (PMS.Models.User)Session["User"];
-    var permissions = user.Role.UserPermissions;
+    var permissions = user != null && user.Role != null ? user.Role.UserPermissions : new List<PMS.Models.UserPermission>();
 }
 
 <!DOCTYPE html>
@@ -127,26 +127,26 @@
                 </li>
             }
 
-           @if (permissions.Count > 0 && permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions"))
+            @if (permissions.Count > 0 && permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions"))
 
-           {
+            {
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Permission</span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                    @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions" && p.CanWrite))
-                    {
-                    <a class="dropdown-item" href="~/User/RegisterPermission">Add Permission</a>
-                    }
-                    <a class="dropdown-item" href="~/User/IndexPermission">List permission</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Permission</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        @if (permissions.Any(p => p.Module != null && p.Module.ModuleName == "Permissions" && p.CanWrite))
+                        {
+                            <a class="dropdown-item" href="~/User/RegisterPermission">Add Permission</a>
+                        }
+                        <a class="dropdown-item" href="~/User/IndexPermission">List permission</a>
 
-                </div>
-            </li>
+                    </div>
+                </li>
 
-           }
+            }
 
 
 

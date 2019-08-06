@@ -32,12 +32,13 @@ namespace PMS.Models
         public string Email { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public Nullable<int> Role_Id { get; set; }
+        public int Role_Id { get; set; }
+        public string ImagePath { get; set; }
+        public string ImageName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patient> Patients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Physician> Physicians { get; set; }
-        public virtual Role Role { get; set; }
     }
 }

@@ -42,9 +42,9 @@ namespace PMS.Controllers
         [HttpPost]
         public ActionResult Save(User physician)
         {
-            if(IsValid(physician.UserName))
+            if ((IsEmailValid(physician.Email)) || (IsValid(physician.UserName)))
             {
-                ViewBag.Message = "User name already exists, please try another user name!";
+                ViewBag.Message = "User name or Email already exists, please try another user name!";
                 PMSEntities1 db = new PMSEntities1();
                 return View("Add");
 

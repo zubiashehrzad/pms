@@ -143,4 +143,14 @@ C:\GitProjects\pms\PMSP\obj\Debug\PMS.csproj.CoreCompileInputs.cache
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.csproj.CopyComplete
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.dll
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.pdb
+C:\GitProjects\pms\PMSP\bin\Newtonsoft.Json.dll
+C:\GitProjects\pms\PMSP\bin\SendGrid.dll
+C:\GitProjects\pms\PMSP\bin\System.Net.Http.dll
+C:\GitProjects\pms\PMSP\bin\System.Security.Cryptography.Algorithms.dll
+C:\GitProjects\pms\PMSP\bin\System.Security.Cryptography.Encoding.dll
+C:\GitProjects\pms\PMSP\bin\System.Security.Cryptography.Primitives.dll
+C:\GitProjects\pms\PMSP\bin\System.Security.Cryptography.X509Certificates.dll
+C:\GitProjects\pms\PMSP\bin\Newtonsoft.Json.xml
+C:\GitProjects\pms\PMSP\bin\SendGrid.pdb
+C:\GitProjects\pms\PMSP\bin\SendGrid.xml
 C:\GitProjects\pms\PMSP\obj\Debug\PMS.csprojAssemblyReference.cache

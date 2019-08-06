@@ -68,6 +68,8 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="PMSDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
           <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
