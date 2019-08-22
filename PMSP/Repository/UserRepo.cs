@@ -23,7 +23,6 @@ namespace PMS.Repository
             }
         }
 
-
         public User GetUserByName(string UserName)
         {
             try
@@ -114,6 +113,62 @@ namespace PMS.Repository
             }
         }
 
+        public bool UpdateImagePath(int userId, string fileName, string filePath)
+        {
+            try
+            {
+                var user = _db.Users.Find(userId);
+                user.ImageName = fileName;
+                user.ImagePath = filePath;
+                _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        public bool UpdateImagePath(int userId, byte[] fileinfo, string filename)
+        {
+            try
+            {
+                var user = _db.Users.Find(userId);
+                user.ImageName = filename;
+                user.FileInfo = fileinfo;
+                _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        public bool UploadUserDoc(int userId, byte[] fileinfo, string filename)
+        {
+            try
+            {
+                var user = _db.Users.Find(userId);
+                user.ImageName = filename;
+                user.FileInfo = fileinfo;
+                _db.Entry(user).State = System.Data.Entity.EntityState.Added;
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+
+       
 
         public int Savepwd(int userId, string password)
         {

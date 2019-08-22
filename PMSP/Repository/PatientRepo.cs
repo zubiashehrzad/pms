@@ -24,7 +24,8 @@ namespace PMS.Repository
 
         public Patient GetPatient(int id)
         {
-            try { 
+            try
+            { 
             return _db.Patients.Find(id);
             }
             catch(Exception ex)
@@ -50,13 +51,12 @@ namespace PMS.Repository
             {
                 return 0;
             }
-                   }
+        }
 
         public bool RemovePatientPhysician(int id)
         {
             try
             {
-
                 var physician = _db.PatientPhysicians.Find(id);
                 _db.Entry(physician).State = System.Data.Entity.EntityState.Deleted;
                 _db.SaveChanges();

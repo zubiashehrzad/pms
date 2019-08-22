@@ -56,7 +56,6 @@ namespace PMS.Repository
         {
             try
             {
-
                 var physician = _db.Physicians.Find(id);
                 var user = _db.Users.Find(physician.UserId);
                 //_db.Users.Remove(user);

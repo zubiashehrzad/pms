@@ -3342,6 +3342,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Filters\CookieReader.cs" />
     <Compile Include="js\demo\App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
@@ -3385,10 +3387,14 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>PMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserDocument.cs">
+      <DependentUpon>PMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserPermission.cs">
       <DependentUpon>PMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\DocumentRepo.cs" />
     <Compile Include="Repository\PatientRepo.cs" />
     <Compile Include="Repository\PhysicianRepo.cs" />
     <Compile Include="Repository\UserRepo.cs" />
@@ -3741,6 +3747,8 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\SuccessMessage.cshtml" />
     <Content Include="Views\User\Upload.cshtml" />
+    <Content Include="Views\Document\Index.cshtml" />
+    <Content Include="Views\Document\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

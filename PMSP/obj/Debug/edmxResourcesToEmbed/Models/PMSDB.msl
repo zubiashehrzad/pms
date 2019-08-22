@@ -68,6 +68,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="PMSDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="FileInfo" ColumnName="FileInfo" />
           <ScalarProperty Name="ImageName" ColumnName="ImageName" />
           <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
           <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
@@ -81,6 +82,19 @@
           <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDocuments">
+      <EntityTypeMapping TypeName="PMSDBModel.UserDocument">
+        <MappingFragment StoreEntitySet="UserDocuments">
+          <ScalarProperty Name="UploadOn" ColumnName="UploadOn" />
+          <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+          <ScalarProperty Name="FileInfo" ColumnName="FileInfo" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -52,6 +52,18 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserDocuments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="User_Id" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="500" />
+          <Property Name="FilePath" Type="varchar" MaxLength="500" />
+          <Property Name="FileInfo" Type="varbinary(max)" />
+          <Property Name="UploadedBy" Type="int" />
+          <Property Name="UploadOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="UserPermissions">
           <Key>
             <PropertyRef Name="Id" />
@@ -81,6 +93,7 @@
           <Property Name="Role_Id" Type="int" Nullable="false" />
           <Property Name="ImagePath" Type="nchar" MaxLength="500" />
           <Property Name="ImageName" Type="nchar" MaxLength="500" />
+          <Property Name="FileInfo" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_PatientPhysicians_Patients">
           <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
@@ -130,6 +143,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserDocuments_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserDocuments" Type="Self.UserDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserDocuments">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserPermissions_Modules">
           <End Role="Modules" Type="Self.Modules" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -156,12 +181,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PMSDBModelStoreContainer">
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPhysicians" EntityType="Self.PatientPhysicians" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Physicians" EntityType="Self.Physicians" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserDocuments" EntityType="Self.UserDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_PatientPhysicians_Patients" Association="Self.FK_PatientPhysicians_Patients">
@@ -180,6 +218,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Physicians" EntitySet="Physicians" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserDocuments_Users" Association="Self.FK_UserDocuments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserDocuments" EntitySet="UserDocuments" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserPermissions_Modules" Association="Self.FK_UserPermissions_Modules">
             <End Role="Modules" EntitySet="Modules" />
             <End Role="UserPermissions" EntitySet="UserPermissions" />
@@ -187,6 +229,10 @@
           <AssociationSet Name="FK_UserPermissions_Roles" Association="Self.FK_UserPermissions_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="UserPermissions" EntitySet="UserPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -288,7 +334,16 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Physician" EntitySet="Physicians" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="FK_Users_Roles" Association="PMSDBModel.FK_Users_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="UserDocuments" EntityType="PMSDBModel.UserDocument" />
+          <AssociationSet Name="FK_UserDocuments_Users" Association="PMSDBModel.FK_UserDocuments_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserDocument" EntitySet="UserDocuments" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="Id" />
@@ -331,6 +386,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="UserPermissions" Relationship="PMSDBModel.FK_UserPermissions_Roles" FromRole="Role" ToRole="UserPermission" />
+          <NavigationProperty Name="Users" Relationship="PMSDBModel.FK_Users_Roles" FromRole="Role" ToRole="User" />
         </EntityType>
         <Association Name="FK_UserPermissions_Roles">
           <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
@@ -362,8 +418,11 @@
           <Property Name="Role_Id" Type="Int32" Nullable="false" />
           <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
           <Property Name="ImageName" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+          <Property Name="FileInfo" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Patients" Relationship="PMSDBModel.FK_Patients_Users" FromRole="User" ToRole="Patient" />
           <NavigationProperty Name="Physicians" Relationship="PMSDBModel.FK_Physicians_Users" FromRole="User" ToRole="Physician" />
+          <NavigationProperty Name="Role" Relationship="PMSDBModel.FK_Users_Roles" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="UserDocuments" Relationship="PMSDBModel.FK_UserDocuments_Users" FromRole="User" ToRole="UserDocument" />
         </EntityType>
         <Association Name="FK_Patients_Users">
           <End Type="PMSDBModel.User" Role="User" Multiplicity="0..1" />
@@ -389,7 +448,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_Users_Roles">
+          <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="PMSDBModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User_Id" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FileInfo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="UploadedBy" Type="Int32" />
+          <Property Name="UploadOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="PMSDBModel.FK_UserDocuments_Users" FromRole="UserDocument" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_UserDocuments_Users">
+          <End Type="PMSDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="PMSDBModel.UserDocument" Role="UserDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserDocument">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -462,6 +558,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="PMSDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="FileInfo" ColumnName="FileInfo" />
                 <ScalarProperty Name="ImageName" ColumnName="ImageName" />
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
@@ -475,6 +572,19 @@
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserDocuments">
+            <EntityTypeMapping TypeName="PMSDBModel.UserDocument">
+              <MappingFragment StoreEntitySet="UserDocuments">
+                <ScalarProperty Name="UploadOn" ColumnName="UploadOn" />
+                <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+                <ScalarProperty Name="FileInfo" ColumnName="FileInfo" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -19,6 +19,7 @@ namespace PMS.Models
         {
             this.Patients = new HashSet<Patient>();
             this.Physicians = new HashSet<Physician>();
+            this.UserDocuments = new HashSet<UserDocument>();
         }
     
         public int Id { get; set; }
@@ -35,10 +36,14 @@ namespace PMS.Models
         public int Role_Id { get; set; }
         public string ImagePath { get; set; }
         public string ImageName { get; set; }
+        public byte[] FileInfo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Patient> Patients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Physician> Physicians { get; set; }
+        public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserDocument> UserDocuments { get; set; }
     }
 }

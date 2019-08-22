@@ -95,6 +95,15 @@
       <End Role="User" EntitySet="Users" />
       <End Role="Physician" EntitySet="Physicians" />
     </AssociationSet>
+    <AssociationSet Name="FK_Users_Roles" Association="PMSDBModel.FK_Users_Roles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <EntitySet Name="UserDocuments" EntityType="PMSDBModel.UserDocument" />
+    <AssociationSet Name="FK_UserDocuments_Users" Association="PMSDBModel.FK_UserDocuments_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserDocument" EntitySet="UserDocuments" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Module">
     <Key>
@@ -138,6 +147,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
     <NavigationProperty Name="UserPermissions" Relationship="PMSDBModel.FK_UserPermissions_Roles" FromRole="Role" ToRole="UserPermission" />
+    <NavigationProperty Name="Users" Relationship="PMSDBModel.FK_Users_Roles" FromRole="Role" ToRole="User" />
   </EntityType>
   <Association Name="FK_UserPermissions_Roles">
     <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
@@ -169,8 +179,11 @@
     <Property Name="Role_Id" Type="Int32" Nullable="false" />
     <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
     <Property Name="ImageName" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+    <Property Name="FileInfo" Type="Binary" MaxLength="Max" FixedLength="false" />
     <NavigationProperty Name="Patients" Relationship="PMSDBModel.FK_Patients_Users" FromRole="User" ToRole="Patient" />
     <NavigationProperty Name="Physicians" Relationship="PMSDBModel.FK_Physicians_Users" FromRole="User" ToRole="Physician" />
+    <NavigationProperty Name="Role" Relationship="PMSDBModel.FK_Users_Roles" FromRole="User" ToRole="Role" />
+    <NavigationProperty Name="UserDocuments" Relationship="PMSDBModel.FK_UserDocuments_Users" FromRole="User" ToRole="UserDocument" />
   </EntityType>
   <Association Name="FK_Patients_Users">
     <End Type="PMSDBModel.User" Role="User" Multiplicity="0..1" />
@@ -193,6 +206,43 @@
       </Principal>
       <Dependent Role="Physician">
         <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Roles">
+    <End Type="PMSDBModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="PMSDBModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="Role_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="UserDocument">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="User_Id" Type="Int32" Nullable="false" />
+    <Property Name="FileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="FileInfo" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="UploadedBy" Type="Int32" />
+    <Property Name="UploadOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="User" Relationship="PMSDBModel.FK_UserDocuments_Users" FromRole="UserDocument" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_UserDocuments_Users">
+    <End Type="PMSDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="PMSDBModel.UserDocument" Role="UserDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserDocument">
+        <PropertyRef Name="User_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

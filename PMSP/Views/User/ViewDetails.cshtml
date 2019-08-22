@@ -8,7 +8,7 @@
 
 
 <head>
-    <title>AssociatePhysician</title>
+    <title>View User</title>
     <style>
 
         /* Create three unequal columns that floats next to each other */
@@ -35,39 +35,156 @@
     </style>
 </head>
 
-<form method="post" action="~/User/UploadFile" enctype="multipart/form-data">
 
 
-    <h2>View User Details</h2>
-    <div class="row">
+
+<h2>View User Details</h2>
+<div class="row">
 
 
-        <div class="column Left">
+    <div class="column Left">
 
-            <label>Name:</label> @(user.FirstName + ' ' + user.LastName)<br />
-            <label>DOB:</label> @(user.DOB)<br />
+        <label>Name:</label> @(user.FirstName + ' ' + user.LastName)<br />
+        <label>DOB:</label> @(user.DOB)<br />
 
-            <label>Gender:</label>@(user.Gender == 1 ? "Male" : "FeMale")<br />
-            <label>Address:</label> @(user.Address)<br />
-            <label>Phone:</label> @(user.Phone)<br />
-            <label>Email:</label> @(user.Email)<br />
+        <label>Gender:</label>@(user.Gender == 1 ? "Male" : "FeMale")<br />
+        <label>Address:</label> @(user.Address)<br />
+        <label>Phone:</label> @(user.Phone)<br />
+        <label>Email:</label> @(user.Email)<br />
 
-            <label>User Name:</label> @(user.UserName)<br />
-            <label>Password:</label> @(user.Password)<br />
+        <label>User Name:</label> @(user.UserName)<br />
+        <label>Password:</label> @(user.Password)<br />
 
-        </div>
+    </div>
 
-        <div class="column Right">
-            <h2>Upload Image</h2>
+    <div class="column Right">
+        @{
+            var image = user.FileInfo != null ? Convert.ToBase64String(user.FileInfo) : null;
+            var imgSrc = image != null ? String.Format("data:image/gif;base64,{0}", image) : "";
+        }
+        <img src="@imgSrc" style="height:80px;" />
+        <h2> Upload Image <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Upload Image</button>   </h2>
 
-            <input type="hidden" name="userId" value="@user.Id" />
-            Select Image<input type="file" name="fileInfo" />
-            <input type="submit" value="Upload" />
+
+
+
+        <div class="container">
+
+            <!-- Trigger the modal with a button -->
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h1 class="modal-title">Upload</h1>
+                        </div>
+                        <div class="modal-body">
+
+                            <div id="popup">
+
+                                <form method="post" action="~/User/UploadFile" enctype="multipart/form-data">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    Select Image <br />
+                                    <input type="file" name="fileInfo" />  <br />
+                                    <input type="submit" value="Upload" />
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_popupClose" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
 
-</form>
+
+    </div>
+
+</div>
+
+
+
+
+<h2> Upload Document <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">Upload Document</button>   </h2>
+
+
+
+
+
+
+<!-- Trigger the modal with a button -->
+<!-- Modal -->
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1 class="modal-title">Upload</h1>
+            </div>
+            <div class="modal-body">
+
+                <div id="popup">
+
+                    <form method="post" action="~/Document/UploadDocument" enctype="multipart/form-data">
+                        <input type="hidden" name="user_Id" value="@user.Id" />
+                        Select Document <br />
+                        <input type="file" name="documentInfo" />  <br />
+                        <input type="submit" value="Upload Document" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+
+            <th>Name</th>
+            <th>Uploaded By</th>
+            <th>Uploaded On</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var document in user.UserDocuments)    //if we are using view bag methodology then we need to give view bag parametre here its users, if we are using view data methodology then we need to give  vusers parameter, in this loop  insted of Model in both cases
+        {
+            <tr>
+
+
+                <td>@document.FileName</td>
+                <td>@document.UploadedBy</td>
+
+                <td>@document.UploadOn</td>
+
+                <td>
+                    <a href="~/Document/DownloadFile/@document.Id">Download</a> <span>|</span>
+                    <a href="~/Document/DeleteFile/@document.Id">Delete</a> <span>|</span>
+
+
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
 
 
 

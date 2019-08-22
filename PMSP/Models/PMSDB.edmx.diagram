@@ -15,10 +15,13 @@
         <AssociationConnector Association="PMSDBModel.FK_UserPermissions_Modules" />
         <EntityTypeShape EntityType="PMSDBModel.Role" Width="1.5" PointX="0.75" PointY="5.125" />
         <AssociationConnector Association="PMSDBModel.FK_UserPermissions_Roles" />
-        <EntityTypeShape EntityType="PMSDBModel.User" Width="1.5" PointX="3" PointY="2.25" />
+        <EntityTypeShape EntityType="PMSDBModel.User" Width="1.5" PointX="3" PointY="1.75" />
         <AssociationConnector Association="PMSDBModel.FK_Patients_Users" />
         <AssociationConnector Association="PMSDBModel.FK_Physicians_Users" />
-      </Diagram>
+        <AssociationConnector Association="PMSDBModel.FK_Users_Roles" />
+        <EntityTypeShape EntityType="PMSDBModel.UserDocument" Width="1.5" PointX="0.625" PointY="2" />
+        <AssociationConnector Association="PMSDBModel.FK_UserDocuments_Users" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

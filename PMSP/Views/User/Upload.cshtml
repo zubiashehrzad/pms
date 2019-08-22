@@ -2,13 +2,31 @@
 @{
     ViewBag.Title = "Upload";
     Layout = "~/Views/Shared/_myLayoutPage1.cshtml";
-    var user = (PMS.Models.User)Session["User"];
+    //var user = (PMS.Models.User)Session["User"];
+    var user = PMS.Filters.CookieReader.ReadCookie();
+    //string test = "";
+
+    string data = "1213";
+    data = data + "456";
+    data = data + "789";
+    data += "101112";
+
+    data = string.Concat(data, "13141516");
+
+
+    string[] arrayOfstring = new string[] { "a", "b", "v", "d", "e" };
+    //user.Select(user => user.FirstName).ToArray();
+    var joinedString = string.Join(",", arrayOfstring);
+    arrayOfstring = joinedString.Split(',');
+
 }
 
 <h2>Upload</h2>
 <form method="post" action="~/User/UploadFile" enctype="multipart/form-data">
     <input type="hidden" name="userId" value="@user.Id" />
-    Select Document<input type="file" name="fileInfo" />
+    Select Document<br />
+    <input type="file" name="fileInfo" /><br />
+
     <input type="submit" value="Upload" />
 </form>
 

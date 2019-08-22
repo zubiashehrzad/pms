@@ -52,4 +52,3 @@ C:\GitProjects\pms\PMS.Tests\bin\Debug\System.Security.Cryptography.X509Certific
 C:\GitProjects\pms\PMS.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\GitProjects\pms\PMS.Tests\bin\Debug\SendGrid.pdb
 C:\GitProjects\pms\PMS.Tests\bin\Debug\SendGrid.xml
-C:\GitProjects\pms\PMS.Tests\obj\Debug\PMS.Tests.csprojAssemblyReference.cache

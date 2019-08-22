@@ -9,6 +9,8 @@ using PMS.Models;
 using PMS.Filters;
 using PMS.SendGridEmailService;
 using System.IO;
+using System.Web.Security;
+using System.Web.Script.Serialization;
 
 namespace PMS.Controllers
 {
@@ -27,7 +29,9 @@ namespace PMS.Controllers
             var users = _userRepo.GetUsers();
             ViewData["users"] = users; // When we use view data then we don't need to cast its type on the view side. While when we don't need type casting in case of viewbag 
             ViewBag.users = users;   // its a container that takes the value from controller and passes it to view, it can contain any string or object
+            ViewBag.message = "Hello users m testing ";
             return View(users);   // it ll map the model on view that we can use there to show/list the values from DB, can use one of them at a time
+
         }
 
         [CustomAuthorize(permissionEntity = "Users")]  //authorize
@@ -95,6 +99,11 @@ namespace PMS.Controllers
             return RedirectToAction("Index", "user", new { });
         }
 
+        #endregion
+
+
+        #region fileing
+
         public ActionResult Upload()
         {
             return View();
@@ -103,13 +112,21 @@ namespace PMS.Controllers
         public ActionResult UploadFile(int userId, HttpPostedFileBase fileInfo)
         {
             string fileName = Path.GetFileName(fileInfo.FileName);
-            string filePath = Path.Combine(Server.MapPath("~/Files"), userId.ToString() + "-" + DateTime.Now.ToString("MMddyyyyhhmmsstt") + Path.GetExtension(fileInfo.FileName));
-            //string filePath = Url.Content("~/Files/" + fileInfo.FileName);
-            fileInfo.SaveAs(filePath);
+            //string filePath = userId.ToString() + "-" + DateTime.Now.ToString("MMddyyyyhhmmsstt") + Path.GetExtension(fileInfo.FileName);
+            //string rootedPath = Path.Combine(Server.MapPath("~/Files"), filePath); // full direction from root, complete path
+            //fileInfo.SaveAs(rootedPath);
+            //_userRepo.UpdateImagePath(userId, fileName, filePath);
+            MemoryStream ms = new MemoryStream();
+            fileInfo.InputStream.CopyTo(ms);
+            byte[] fileArray = ms.ToArray();
+            _userRepo.UpdateImagePath(userId, fileArray, fileName);
             return RedirectToAction("Index", "User", new { });
         }
 
+
         #endregion
+
+        #region Permissions
 
         [CustomAuthorize]
         public ActionResult SavePermission(UserPermission userpermission)
@@ -199,6 +216,10 @@ namespace PMS.Controllers
             return View("RegisterPermission", User);
         }
 
+        #endregion
+
+        #region Login page
+
         [AllowAnonymous]
         public ActionResult Login()
         {
@@ -222,8 +243,36 @@ namespace PMS.Controllers
             bool isValid = _userRepo.Validate(txtUserName, txtPassword);
             if (isValid)
             {
-                Session["User"] = _userRepo.GetUserByName(txtUserName, txtPassword);
+                // below 2 lines are for session
+                var user = _userRepo.GetUserByName(txtUserName, txtPassword);
+                Session["User"] = user;
+
                 //Session.Timeout = 30;
+                //rest of the lines are being written for cookie
+                User u = new User();
+                u.FirstName = user.FirstName;
+                u.LastName = user.LastName;
+                u.Id = user.Id;
+                u.Role_Id = user.Role_Id;
+
+                // Javascript Serializer class is used to searialize or deserialize object into or from JSON strong format.
+                // JSON string format is something like a key paired value string object which we can use to show the data on browsers using any front end framework like angular.js or even JSON format can be used in ajax requests.
+                JavaScriptSerializer seralizer = new JavaScriptSerializer();
+                string userData = seralizer.Serialize(u);
+
+                // Forms Authentication Ticket class is used to create a ticket for encrypting user data using FormsAuthnetication class used below.
+                FormsAuthenticationTicket faTicket = new FormsAuthenticationTicket
+                    (1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData);
+
+                var encryptedData = FormsAuthentication.Encrypt(faTicket);
+
+                // HttpCookie class is used to create browser based cookie to store user data in that. Wich we can used throughout our application just like a session.
+                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedData);
+                cookie.Expires = DateTime.Now.AddMinutes(1440);
+
+                //Adding cookie to browser using response.cookie method.
+                Response.Cookies.Add(cookie);
+
                 return RedirectToAction("Index", "Home", new { });
             }
             ViewBag.Message = "Invalid Username/Password!";
@@ -280,17 +329,18 @@ namespace PMS.Controllers
         }
 
         [HttpPost]
-        public bool IsValid(string UserName)
+        public bool IsValid(string UserName) // chks same username already existes in db ?
         {
             return _userRepo.ValidateUser(UserName);
         }
 
         [HttpPost]
-        public bool IsEmailValid(string Email)
+        public bool IsEmailValid(string Email) // chks same email exists in db ??
         {
             return _userRepo.ValidateEmail(Email);
         }
 
+        #endregion
         public void RoleList()
         {
             PMSEntities1 db = new PMSEntities1();
